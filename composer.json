@@ -1,0 +1,29 @@
+{
+    "name": "hostnet/hn-doctrine-plugin",
+    "description": "Plugin to integrate Doctrine into a Symfony1 application, Symfony2 style.",
+    "license": "proprietary",
+    "require": {
+        "php": ">=5.3",
+        "symfony/symfony1": ">=1.1",
+        "symfony/symfony": ">=2.3",
+        "doctrine/doctrine-bundle": ">=1.2.0",
+        "doctrine/orm": ">=2.3"
+    },
+    "minimum-stability": "stable",
+    "repositories": [
+        {
+            "type":"composer",
+            "url": "http://packagist.hostnetbv.nl"
+        }
+    ],
+    "autoload": {
+        "psr-0": {
+	          "Hostnet\\HnDoctrinePlugin": "src/"
+	      }
+    },
+    "config": {
+        "github-oauth": {
+            "github.com": "24e3cb387f717ceafba3d698fea75ddac7dfd2f9"
+        }
+    }
+}
