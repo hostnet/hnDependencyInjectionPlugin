@@ -76,7 +76,7 @@ class HnDatabaseConfigHandler extends \sfYamlConfigHandler
     $resolver->addLoader(new YamlFileLoader($container, $locator));
 
     $resource = 'config-' . \sfConfig::get('sf_environment') . '.yml';
-    if(!file_exists($resource)) {
+    if(!file_exists($file->getPath() . '/' . $resource)) {
       $resource = 'config.yml';
     }
     $resolver->resolve($resource)->load($resource);
