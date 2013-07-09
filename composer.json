@@ -1,6 +1,6 @@
 {
-    "name": "hostnet/hn-doctrine-plugin",
-    "description": "Plugin to integrate Doctrine into a Symfony1 application, Symfony2 style.",
+    "name": "hostnet/hn-entities-plugin",
+    "description": "Plugin to integrate Doctrine / Hostnet entities into a Symfony1 application, Symfony2 style.",
     "license": "proprietary",
     "require": {
         "php": ">=5.3",
@@ -18,7 +18,7 @@
     ],
     "autoload": {
         "psr-0": {
-	          "Hostnet\\HnDoctrinePlugin": "src/"
+	          "Hostnet\\HnEntitiesPlugin": "src/"
 	      }
     },
     "config": {

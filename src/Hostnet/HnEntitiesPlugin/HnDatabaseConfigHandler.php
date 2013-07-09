@@ -1,5 +1,5 @@
 <?php
-namespace Hostnet\HnDoctrinePlugin;
+namespace Hostnet\HnEntitiesPlugin;
 
 use Doctrine\DBAL\Connection;
 
