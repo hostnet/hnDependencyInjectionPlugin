@@ -68,7 +68,7 @@ class HnDatabaseConfigHandler extends \sfYamlConfigHandler
         date('Y/m/d H:i:s'), $output);
   }
 
-  private function addResource(ContainerBuilder $container, SplFileInfo $file)
+  private function addResource(ContainerBuilder $container, \SplFileInfo $file)
   {
     $locator = new FileLocator($file->getPath());
 

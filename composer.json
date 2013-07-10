@@ -18,8 +18,8 @@
     ],
     "autoload": {
         "psr-0": {
-	          "Hostnet\\HnEntitiesPlugin": "src/"
-	      }
+            "Hostnet\\HnEntitiesPlugin": "src/"
+        }
     },
     "config": {
         "github-oauth": {
