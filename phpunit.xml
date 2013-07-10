@@ -1,0 +1,7 @@
+<phpunit colors="true" bootstrap="test/bootstrap.php">
+    <testsuites>
+        <testsuite name="Entities plugin test suite">
+            <directory>./test</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>
