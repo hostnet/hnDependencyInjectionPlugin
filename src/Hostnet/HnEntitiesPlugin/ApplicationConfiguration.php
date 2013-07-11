@@ -58,7 +58,7 @@ class ApplicationConfiguration extends \sfApplicationConfiguration
   {
     if(! $this->container) {
       $file = \sfConfig::get('sf_config_cache_dir') . '/container_dump.php';
-      $debug = in_array(\sfConfig::get('sf_environment'), array('dev', 'ontw'));
+      $debug = in_array(\sfConfig::get('sf_environment'), array('dev', 'ontw', 'test'));
 
       $container_config_cache = new Symfony2ConfigCache($file, $debug);
       if (!$container_config_cache->isFresh()) {
