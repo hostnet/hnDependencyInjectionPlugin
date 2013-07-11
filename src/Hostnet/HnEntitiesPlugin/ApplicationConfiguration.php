@@ -54,7 +54,7 @@ class ApplicationConfiguration extends \sfApplicationConfiguration
         );
       }
       require_once $file;
-      $this->container = new MyCachedContainer();
+      $this->container = new \MyCachedContainer();
     }
     return $this->container;
   }

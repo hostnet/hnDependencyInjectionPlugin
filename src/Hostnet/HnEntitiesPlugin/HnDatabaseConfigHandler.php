@@ -1,6 +1,8 @@
 <?php
 namespace Hostnet\HnEntitiesPlugin;
 
+use Symfony\Component\DependencyInjection\ContainerInterface;
+
 use Doctrine\DBAL\Connection;
 
 use Symfony\Bridge\Doctrine\RegistryInterface;
@@ -12,8 +14,6 @@ use Symfony\Component\Config\Loader\LoaderResolver;
 use Symfony\Component\Config\FileLocator;
 
 use Doctrine\Bundle\DoctrineBundle\DependencyInjection\DoctrineExtension;
-
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * Alternative for the \sfDatabaseConfigHandler, it reads the config in the Symfony2 format
@@ -32,11 +32,11 @@ class HnDatabaseConfigHandler
   const DATABASE_ENGINE = 'mysql';
 
   /**
-   * @var ContainerBuilder
+   * @var ContainerInterface
    */
   private $container;
 
-  public function __construct(ContainerBuilder $container)
+  public function __construct(ContainerInterface $container)
   {
     $this->container = $container;
   }
@@ -86,7 +86,7 @@ class HnDatabaseConfigHandler
       $dsn = sprintf(self::DATABASE_ENGINE . ':dbname=%s;host=%s;port=%s', $connection->getDatabase(),
           $connection->getHost(), $connection->getPort());
       $config = array(
-          'classname' => $this->getClassname($debug),
+          'classname' => $this->getClassname($name, $debug),
           'dsn' => $dsn,
           'username' => $connection->getUsername(),
           'password' => $connection->getPassword(),
