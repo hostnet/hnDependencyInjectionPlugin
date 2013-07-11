@@ -25,6 +25,11 @@ class ApplicationConfiguration extends \sfApplicationConfiguration
 {
   private $container;
 
+  /**
+   * @var bool
+   */
+  private $is_fresh = true;
+
   public function getConfigCache()
   {
     if(null === $this->configCache) {
@@ -35,10 +40,21 @@ class ApplicationConfiguration extends \sfApplicationConfiguration
   }
 
   /**
-   * Gets and possibly generates a container.
-   * @return ContainerBuilder
+   * Whether the existing container cache was fresh.
+   * Not fresh config has potentially changed, and should be re-read
+   * @return boolean
    */
-  public final function getContainer()
+  public function isFresh()
+  {
+    $this->getContainer();
+    return $this->is_fresh;
+  }
+
+  /**
+   * Gets and possibly generates a container.
+   * @return ContainerInterface
+   */
+  public function getContainer()
   {
     if(! $this->container) {
       $file = \sfConfig::get('sf_config_cache_dir') . '/container_dump.php';
@@ -46,6 +62,7 @@ class ApplicationConfiguration extends \sfApplicationConfiguration
 
       $container_config_cache = new Symfony2ConfigCache($file, $debug);
       if (!$container_config_cache->isFresh()) {
+        $this->is_fresh = false;
         $container = $this->createNewContainer($debug);
         $dumper = new PhpDumper($container);
         $container_config_cache->write(

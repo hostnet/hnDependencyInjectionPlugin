@@ -8,10 +8,6 @@ class TestConfigCache extends ConfigCache
 
   public $args;
 
-  public function __construct()
-  {
-  }
-
   protected function createDatabaseHandler()
   {
     return $this->handler;
@@ -36,11 +32,14 @@ class ConfigCacheTest extends PHPUnit_Framework_TestCase
 
   public function testCheckConfig()
   {
+    $app_config = $this->getMockBuilder('Hostnet\HnEntitiesPlugin\ApplicationConfiguration')->
+        disableOriginalConstructor()->
+        getMock();
     $handler = $this->getMockBuilder('Hostnet\HnEntitiesPlugin\HnDatabaseConfigHandler')->disableOriginalConstructor()->getMock();
     $handler->expects($this->once())->method('execute')->with()->
         will($this->returnValue('muhaha'));
 
-    $configuration = new TestConfigCache();
+    $configuration = new TestConfigCache($app_config);
     $configuration->handler = $handler;
     $this->assertEquals('/meh/the_root/cache/config_databases.yml.php',
         $configuration->checkConfig('config/databases.yml'));

@@ -10,25 +10,40 @@ namespace Hostnet\HnEntitiesPlugin;
 class ConfigCache extends \sfConfigCache
 {
   /**
+   * Constructor overridden to enforce stricter typing
+   * @param ApplicationConfiguration $configuration
+   */
+  public function __construct(ApplicationConfiguration $configuration)
+  {
+    parent::__construct($configuration);
+  }
+
+  /**
    * @see sfConfigCache::checkConfig()
-   * @todo Do not always write the cache file
    * @return string The cached file that was just written
    */
-  public function checkConfig($configPath, $optional = false)
+  public function checkConfig($config_path, $optional = false)
   {
-    if($configPath === 'config/databases.yml') {
-      $handler = $this->createDatabaseHandler();
-      if(!($handler instanceof HnDatabaseConfigHandler)) {
-        throw new \RuntimeException('Someone created a handler of incorrect type '.get_class($handler));
+    if($config_path === 'config/databases.yml') {
+      if(!$this->configuration->isFresh()) {
+        $this->writeDatabaseCache($config_path);
       }
-      $full_path = \sfConfig::get('sf_root_dir') . '/' . $configPath;
-      $data = $handler->execute();
-
-      $cache = $this->getCacheName($configPath);
-      $this->writeCacheFile($configPath, $cache, $data);
-      return $cache;
+      return $this->getCacheName($config_path);
     }
-    return parent::checkConfig($configPath, $optional);
+    return parent::checkConfig($config_path, $optional);
+  }
+
+  private function writeDatabaseCache($config_path)
+  {
+    $handler = $this->createDatabaseHandler();
+    if(!($handler instanceof HnDatabaseConfigHandler)) {
+      throw new \RuntimeException('Someone created a handler of incorrect type '.get_class($handler));
+    }
+    $full_path = \sfConfig::get('sf_root_dir') . '/' . $config_path;
+    $data = $handler->execute();
+
+    $cache = $this->getCacheName($config_path);
+    $this->writeCacheFile($config_path, $cache, $data);
   }
 
   /**
