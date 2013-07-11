@@ -83,13 +83,13 @@ class ApplicationConfiguration extends \sfApplicationConfiguration
     $this->addResourcesToContainer($container);
 
     $container->setParameter('kernel.debug', $debug);
-    $path = \sfConfig::get('sf_config_dir');
+    $path = \sfConfig::get('sf_app_config_dir');
     $locator = new FileLocator($path);
 
     $resolver = new LoaderResolver();
     $resolver->addLoader(new YamlFileLoader($container, $locator));
 
-    $resource = 'config-' . \sfConfig::get('sf_environment') . '.yml';
+    $resource = 'config_' . \sfConfig::get('sf_environment') . '.yml';
     if(! file_exists($path . '/' . $resource)) {
       $resource = 'config.yml';
     }
