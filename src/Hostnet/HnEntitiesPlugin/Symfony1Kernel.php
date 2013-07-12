@@ -95,7 +95,7 @@ class Symfony1Kernel extends Kernel implements CachedKernelInterface
   public function registerContainerConfiguration(LoaderInterface $loader)
   {
     $path = $this->getConfigDir();
-    $resource = 'config-' . \sfConfig::get('sf_environment') . '.yml';
+    $resource = 'config_' . $this->environment . '.yml';
     if(! file_exists($path . '/' . $resource)) {
       $resource = 'config.yml';
     }
