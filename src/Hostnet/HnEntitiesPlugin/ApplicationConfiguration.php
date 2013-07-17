@@ -2,6 +2,8 @@
 
 namespace Hostnet\HnEntitiesPlugin;
 
+use Symfony\Component\DependencyInjection\ContainerInterface;
+
 use Symfony\Component\DependencyInjection\Dumper\PhpDumper;
 
 use Symfony\Component\Config\ConfigCache as Symfony2ConfigCache;
