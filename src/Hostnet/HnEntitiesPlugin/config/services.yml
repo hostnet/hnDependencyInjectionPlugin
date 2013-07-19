@@ -1,0 +1,6 @@
+services:
+    kernel.listener.symfony1_fallback:
+        class: Hostnet\HnEntitiesPlugin\Symfony1Fallback
+        arguments: [@kernel]
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }

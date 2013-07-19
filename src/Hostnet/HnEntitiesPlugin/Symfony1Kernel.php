@@ -20,9 +20,11 @@ use Symfony\Component\HttpKernel\Kernel;
  */
 class Symfony1Kernel extends Kernel implements CachedKernelInterface
 {
+  private $configuration;
+
   private $is_fresh = true;
 
-  public function __construct()
+  public function __construct(\sfApplicationConfiguration $configuration)
   {
     $environment = \sfConfig::get('sf_environment');
     $debug = in_array($environment, array(
@@ -31,6 +33,12 @@ class Symfony1Kernel extends Kernel implements CachedKernelInterface
                                           'test'
     ));
     parent::__construct($environment, $debug);
+    $this->configuration = $configuration;
+  }
+
+  public function getConfiguration()
+  {
+    return $this->configuration;
   }
 
   public function isFresh()
@@ -94,6 +102,8 @@ class Symfony1Kernel extends Kernel implements CachedKernelInterface
    */
   public function registerContainerConfiguration(LoaderInterface $loader)
   {
+    $loader->load(__DIR__ . '/config/services.yml');
+
     $path = $this->getConfigDir();
     $resource = 'config_' . $this->environment . '.yml';
     if(! file_exists($path . '/' . $resource)) {

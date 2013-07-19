@@ -2,6 +2,10 @@
 
 namespace Hostnet\HnEntitiesPlugin;
 
+use Symfony\Component\HttpKernel\HttpKernelInterface;
+
+use Symfony\Component\HttpFoundation\Request;
+
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 use Symfony\Component\DependencyInjection\Dumper\PhpDumper;
@@ -32,7 +36,7 @@ class ApplicationConfiguration extends \sfApplicationConfiguration
    */
   protected function createKernel()
   {
-    return new Symfony1Kernel();
+    return new Symfony1Kernel($this);
   }
 
   public function getConfigCache()
@@ -42,6 +46,15 @@ class ApplicationConfiguration extends \sfApplicationConfiguration
       $this->configCache = new ConfigCache($this);
     }
     return $this->configCache;
+  }
+
+  /**
+   * @see HttpKernelInterface::handle();
+   * @return \Symfony\Component\HttpFoundation\Response
+   */
+  public function handle(Request $request, $type = HttpKernelInterface::MASTER_REQUEST, $catch = true)
+  {
+    return $this->getKernel()->handle($request, $type, $catch);
   }
 
   /**
