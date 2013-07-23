@@ -2,10 +2,9 @@
 namespace Hostnet\HnEntitiesPlugin;
 
 use Hostnet\HnEntitiesPlugin\ApplicationConfiguration;
-
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class Actions extends \sfActions
+class Components extends \sfComponents
 {
   protected function get($id, $invalid_behavior = ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE)
   {
