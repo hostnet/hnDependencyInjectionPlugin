@@ -1,6 +1,8 @@
 <?php
 namespace Hostnet\HnEntitiesPlugin;
 
+use Doctrine\DBAL\Driver;
+
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 use Doctrine\DBAL\Connection;
@@ -69,9 +71,10 @@ class HnDatabaseConfigHandler
   {
     $output = '';
     foreach($registry->getConnections() as $name => $connection) {
-      $config = array('name' => $name, 'dsn' => $this->formatDSN($connection));
-      $output .= sprintf('$this->setDatabase("%s", new %s(%s))', $name, $this->getPropelClass(),
+      $config = array('dsn' => $this->formatDSN($connection), 'name' => $name);
+      $output .= sprintf('$this->setDatabase(\'%s\', new %s(%s));', $name, $this->getPropelClass(),
           var_export($config, true));
+      $output .= PHP_EOL . PHP_EOL;
     }
     return $output;
   }
@@ -83,7 +86,9 @@ class HnDatabaseConfigHandler
     foreach($registry->getConnections() as $name => $connection) {
       /* @var $connection Connection */
 
-      $dsn = sprintf(self::DATABASE_ENGINE . ':dbname=%s;host=%s;port=%s', $connection->getDatabase(),
+      $dsn = sprintf('%s:dbname=%s;host=%s;port=%s',
+          $this->getPropelDriverName($connection->getDriver()),
+          $connection->getDatabase(),
           $connection->getHost(), $connection->getPort());
       $config = array(
           'classname' => $this->getClassname($name, $debug),
@@ -119,12 +124,29 @@ class HnDatabaseConfigHandler
    */
   private function formatDSN(Connection $connection)
   {
-    return sprintf(self::DATABASE_ENGINE . '://%s:%s@%s:%s/%s',
+    return sprintf('%s://%s:%s@%s%s/%s',
+        $this->getPropelDriverName($connection->getDriver()),
         $connection->getUsername(),
         $connection->getPassword(),
         $connection->getHost(),
-        $connection->getPort(),
+        $connection->getPort() ? ':' . $connection->getPort() : '',
         $connection->getDatabase());
+  }
+
+  /**
+   * @param Driver $driver
+   * @throws \DomainException
+   * @return string
+   */
+  private function getPropelDriverName(Driver $driver)
+  {
+    switch($driver->getName()) {
+      case 'pdo_mysql':
+        return 'mysql';
+      case 'pdo_pgsql':
+        return 'pgsql';
+    }
+    throw new \DomainException(sprintf('Unknown driver "%s"', $driver->getName()));
   }
 
   /**
