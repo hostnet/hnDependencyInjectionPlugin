@@ -140,11 +140,12 @@ class HnDatabaseConfigHandler
    */
   private function getPropelDriverName(Driver $driver)
   {
-    switch($driver->getName()) {
-      case 'pdo_mysql':
-        return 'mysql';
-      case 'pdo_pgsql':
-        return 'pgsql';
+    $lookup_table = array(
+        'pdo_mysql' => 'mysql',
+        'pdo_pgsql' => 'pgsql',
+        'pdo_sqlite' => 'sqlite');
+    if(isset($lookup_table[$driver->getName()])) {
+      return $lookup_table[$driver->getName()];
     }
     throw new \DomainException(sprintf('Unknown driver "%s"', $driver->getName()));
   }
