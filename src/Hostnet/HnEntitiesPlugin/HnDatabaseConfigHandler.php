@@ -124,8 +124,14 @@ class HnDatabaseConfigHandler
    */
   private function formatDSN(Connection $connection)
   {
+    $driver_name = $this->getPropelDriverName($connection->getDriver());
+    if($connection->getDriver()->getName() == 'pdo_sqlite') {
+      return sprintf('%s://hack.nl/%s',
+          $driver_name,
+          $connection->getDatabase());
+    }
     return sprintf('%s://%s:%s@%s%s/%s',
-        $this->getPropelDriverName($connection->getDriver()),
+        $driver_name,
         $connection->getUsername(),
         $connection->getPassword(),
         $connection->getHost(),
