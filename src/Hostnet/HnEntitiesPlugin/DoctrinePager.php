@@ -34,7 +34,7 @@ class DoctrinePager extends \sfPager
   {
     $dql_part = $builder->getDQLPart('from');
 
-    if(!is_array($dql_part) || count($dql_part) !== 1 ||  !($dql_part[0] instanceof Doctrine\ORM\Query\Expr\From)) {
+    if(!is_array($dql_part) || count($dql_part) !== 1 ||  !($dql_part[0] instanceof \Doctrine\ORM\Query\Expr\From)) {
       throw new \DomainException('The from should be an instance of from');
     }
     return $dql_part[0]->getAlias();
