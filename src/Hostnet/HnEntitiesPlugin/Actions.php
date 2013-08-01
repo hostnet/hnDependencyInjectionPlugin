@@ -1,6 +1,8 @@
 <?php
 namespace Hostnet\HnEntitiesPlugin;
 
+use Doctrine\Bundle\DoctrineBundle\Registry;
+
 use Hostnet\HnEntitiesPlugin\ApplicationConfiguration;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -15,5 +17,17 @@ class Actions extends \sfActions
       return $config->getContainer()->get($id, $invalid_behavior);
     }
     throw new \DomainException('Your app config should extend ApplicationConfiguration');
+  }
+
+  /**
+   * Shortcut to return the Doctrine Registry service.
+   *
+   * @return Registry
+   *
+   * @throws \LogicException If DoctrineBundle is not available
+   */
+  protected function getDoctrine()
+  {
+    return $this->container->get('doctrine');
   }
 }
