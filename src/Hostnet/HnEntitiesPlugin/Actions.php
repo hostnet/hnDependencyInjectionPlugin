@@ -28,6 +28,6 @@ class Actions extends \sfActions
    */
   protected function getDoctrine()
   {
-    return $this->container->get('doctrine');
+    return $this->get('doctrine');
   }
 }
