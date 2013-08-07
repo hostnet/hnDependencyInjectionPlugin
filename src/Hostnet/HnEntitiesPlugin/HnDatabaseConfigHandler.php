@@ -51,10 +51,16 @@ class HnDatabaseConfigHandler
   {
     $debug = $this->container->getParameter('kernel.debug');
 
+    $connections = array();
+    if(!$this->container->hasParameter('hn_entities_enable_backwards_compatible_connections') ||
+        $this->container->getParameter('hn_entities_enable_backwards_compatible_connections')) {
+      $connections = $this->container->get('doctrine')->getConnections();
+    }
+
     if(strpos(SYMFONY_VERSION, '1.1.') === 0) {
-      $output = $this->createSymfony11Output($this->container->get('doctrine'));
+      $output = $this->createSymfony11Output($connections);
     } else if(strpos(SYMFONY_VERSION, '1.3.') === 0 || strpos(SYMFONY_VERSION, '1.4.') === 0) {
-      $output = $this->createSymfony14Output($debug, $this->container->get('doctrine'));
+      $output = $this->createSymfony14Output($debug, $connections);
     } else {
       throw new \DomainException('Untested Symfony version '.SYMFONY_VERSION.
           ', but maybe one of the others will work');
@@ -67,10 +73,10 @@ class HnDatabaseConfigHandler
         date('Y/m/d H:i:s'), $output);
   }
 
-  private function createSymfony11Output(RegistryInterface $registry)
+  private function createSymfony11Output(array $connections)
   {
     $output = '';
-    foreach($registry->getConnections() as $name => $connection) {
+    foreach($connections as $name => $connection) {
       $config = array('dsn' => $this->formatDSN($connection), 'name' => $name);
       $output .= sprintf('$this->setDatabase(\'%s\', new %s(%s));', $name, $this->getPropelClass(),
           var_export($config, true));
@@ -79,11 +85,11 @@ class HnDatabaseConfigHandler
     return $output;
   }
 
-  private function createSymfony14Output($debug, RegistryInterface $registry)
+  private function createSymfony14Output($debug, array $connections)
   {
     $output = 'return array(' . PHP_EOL;
 
-    foreach($registry->getConnections() as $name => $connection) {
+    foreach($connections as $name => $connection) {
       /* @var $connection Connection */
 
       $dsn = sprintf('%s:dbname=%s;host=%s;port=%s',
