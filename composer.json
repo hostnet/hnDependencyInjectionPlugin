@@ -29,5 +29,11 @@
         "psr-0": {
             "Hostnet\\HnDependencyInjectionPlugin": "src/"
         }
-    }
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/hostnet/symfony1"
+        }
+    ]
 }
