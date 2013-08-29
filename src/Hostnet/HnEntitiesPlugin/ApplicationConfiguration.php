@@ -1,5 +1,6 @@
 <?php
 namespace Hostnet\HnEntitiesPlugin;
+
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\DependencyInjection\ContainerInterface;

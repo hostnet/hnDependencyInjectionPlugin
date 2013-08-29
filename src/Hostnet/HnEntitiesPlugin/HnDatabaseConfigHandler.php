@@ -1,5 +1,6 @@
 <?php
 namespace Hostnet\HnEntitiesPlugin;
+
 use Doctrine\DBAL\Driver;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Doctrine\DBAL\Connection;

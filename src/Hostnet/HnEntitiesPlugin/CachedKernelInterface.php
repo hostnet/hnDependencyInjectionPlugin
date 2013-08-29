@@ -1,5 +1,6 @@
 <?php
 namespace Hostnet\HnEntitiesPlugin;
+
 use Symfony\Component\HttpKernel\KernelInterface;
 
 /**
@@ -11,6 +12,7 @@ interface CachedKernelInterface extends KernelInterface
 {
 
     /**
+     *
      * @return bool Whether the cache is still fresh
      */
     public function isFresh();

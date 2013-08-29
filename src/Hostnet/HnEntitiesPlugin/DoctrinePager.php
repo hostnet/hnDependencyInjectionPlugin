@@ -1,5 +1,6 @@
 <?php
 namespace Hostnet\HnEntitiesPlugin;
+
 use Doctrine\ORM\QueryBuilder;
 
 /**
