@@ -17,7 +17,7 @@ hnDependencyInjectionPlugin
 4. Make ```apps/<app>/config/<app>Configuration``` extend ```Hostnet\HnDependencyInjectionPlugin\ApplicationConfiguration```.
 5. [Optional] override the ```getKernel``` method to return your own kernel, registering the bundles you want.
    ```
-   public function getKernel()
+   protected function createKernel()
    {
        return new MyKernel($this);
    }
