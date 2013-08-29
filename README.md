@@ -9,12 +9,12 @@ hnDependencyInjectionPlugin
 2. Add to your composer.json
   ```
   "require": {
-      "hostnet/hn-dependency-injection-plugin": ">=1.0"
+      "hostnet/hn-dependency-injection-plugin": "1.0.*"
   }
 
   ```
 3. Run ```php composer.phar install```.
-4. Make ```apps/<app>/config/<app>Configuration``` extend ```Hostnet\HnEntitiesPlugin\ApplicationConfiguration```.
+4. Make ```apps/<app>/config/<app>Configuration``` extend ```Hostnet\HnDependencyInjectionPlugin\ApplicationConfiguration```.
 5. [Optional] override the ```getKernel``` method to return your own kernel, registering the bundles you want.
    ```
    public function getKernel()
@@ -23,7 +23,7 @@ hnDependencyInjectionPlugin
    }
    ```
    ```
-   class MyKernel extends Hostnet\HnEntitiesPlugin\Symfony1Kernel
+   class MyKernel extends Hostnet\HnDependencyInjectionPlugin\Symfony1Kernel
    {
        public function registerBundles()
        {
