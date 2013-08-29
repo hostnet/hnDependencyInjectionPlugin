@@ -1,5 +1,5 @@
 <?php
-namespace Hostnet\HnEntitiesPlugin;
+namespace Hostnet\HnDependencyInjectionPlugin;
 
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -60,7 +60,7 @@ class ApplicationConfiguration extends \sfApplicationConfiguration
      * Get the current kernel
      *
      * @throws \RuntimeException
-     * @return \Hostnet\HnEntitiesPlugin\CachedKernelInterface
+     * @return \Hostnet\HnDependencyInjectionPlugin\CachedKernelInterface
      */
     private function getKernel()
     {

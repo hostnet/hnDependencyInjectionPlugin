@@ -1,5 +1,5 @@
 <?php
-namespace Hostnet\HnEntitiesPlugin;
+namespace Hostnet\HnDependencyInjectionPlugin;
 
 /**
  * Reads database configuration from the Symfony2 doctrine configuration
@@ -55,7 +55,7 @@ class ConfigCache extends \sfConfigCache
      * Creates the database config handler
      * Override this hook if you prefer a different one :)
      *
-     * @return \Hostnet\HnEntitiesPlugin\HnDatabaseConfigHandler
+     * @return \Hostnet\HnDependencyInjectionPlugin\HnDatabaseConfigHandler
      */
     protected function createDatabaseHandler()
     {

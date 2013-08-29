@@ -1,5 +1,5 @@
 <?php
-namespace Hostnet\HnEntitiesPlugin;
+namespace Hostnet\HnDependencyInjectionPlugin;
 
 use Doctrine\ORM\QueryBuilder;
 

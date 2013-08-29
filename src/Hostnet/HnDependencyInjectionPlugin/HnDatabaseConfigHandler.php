@@ -1,5 +1,5 @@
 <?php
-namespace Hostnet\HnEntitiesPlugin;
+namespace Hostnet\HnDependencyInjectionPlugin;
 
 use Doctrine\DBAL\Driver;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -16,7 +16,7 @@ use Doctrine\Bundle\DoctrineBundle\DependencyInjection\DoctrineExtension;
  *
  * If you want to use this
  * Let your ApplicationConfiguration extend the
- * Hostnet\HnEntitiesPlugin\ApplicationConfiguration
+ * Hostnet\HnDependencyInjectionPlugin\ApplicationConfiguration
  *
  * If you want to develop on this class, please note that this is very early in
  * the sf1 initialization

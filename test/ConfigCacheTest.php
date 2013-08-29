@@ -1,6 +1,6 @@
 <?php
 
-use Hostnet\HnEntitiesPlugin\ConfigCache;
+use Hostnet\HnDependencyInjectionPlugin\ConfigCache;
 
 class TestConfigCache extends ConfigCache
 {
@@ -32,10 +32,10 @@ class ConfigCacheTest extends PHPUnit_Framework_TestCase
 
   public function testCheckConfig()
   {
-    $app_config = $this->getMockBuilder('Hostnet\HnEntitiesPlugin\ApplicationConfiguration')->
+    $app_config = $this->getMockBuilder('Hostnet\HnDependencyInjectionPlugin\ApplicationConfiguration')->
         disableOriginalConstructor()->
         getMock();
-    $handler = $this->getMockBuilder('Hostnet\HnEntitiesPlugin\HnDatabaseConfigHandler')->disableOriginalConstructor()->getMock();
+    $handler = $this->getMockBuilder('Hostnet\HnDependencyInjectionPlugin\HnDatabaseConfigHandler')->disableOriginalConstructor()->getMock();
     $handler->expects($this->once())->method('execute')->with()->
         will($this->returnValue('muhaha'));
 

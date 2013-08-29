@@ -1,5 +1,5 @@
 <?php
-use Hostnet\HnEntitiesPlugin\ApplicationConfiguration;
+use Hostnet\HnDependencyInjectionPlugin\ApplicationConfiguration;
 
 class ApplicationConfigurationTest extends PHPUnit_Framework_TestCase
 {
@@ -7,7 +7,7 @@ class ApplicationConfigurationTest extends PHPUnit_Framework_TestCase
   {
     $config = new ApplicationConfiguration('test', true);
     $cache = $config->getConfigCache();
-    $this->assertInstanceOf('Hostnet\HnEntitiesPlugin\ConfigCache', $cache);
+    $this->assertInstanceOf('Hostnet\HnDependencyInjectionPlugin\ConfigCache', $cache);
 
     // And only one is made
     $this->assertTrue($cache === $config->getConfigCache());

@@ -1,5 +1,5 @@
 <?php
-namespace Hostnet\HnEntitiesPlugin;
+namespace Hostnet\HnDependencyInjectionPlugin;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Config\Loader\DelegatingLoader;

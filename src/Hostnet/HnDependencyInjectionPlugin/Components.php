@@ -1,7 +1,7 @@
 <?php
-namespace Hostnet\HnEntitiesPlugin;
+namespace Hostnet\HnDependencyInjectionPlugin;
 
-use Hostnet\HnEntitiesPlugin\ApplicationConfiguration;
+use Hostnet\HnDependencyInjectionPlugin\ApplicationConfiguration;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**

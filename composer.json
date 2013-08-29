@@ -1,29 +1,33 @@
 {
-    "name": "hostnet/hn-entities-plugin",
-    "description": "Plugin to integrate Doctrine / Hostnet entities into a Symfony1 application, Symfony2 style.",
-    "license": "proprietary",
+    "name": "hostnet/hn-dependency-injection-plugin",
+    "description": "Introduces the Symfony 2 DI container in a Symfony 1 application.",
+    "type": "library",
+    "keywords": ["symfony", "dependency-injection", "container", "doctrine"],
+    "authors": [
+        {
+            "name": "Nico Schoenmaker",
+            "homepage": "http://nschoenmaker.nl",
+            "role": "Developer"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/hostnet/hnDependencyInjectionPlugin/issues",
+        "source": "https://github.com/hostnet/hnDependencyInjectionPlugin"
+    },
+    "license": "EPL-1.0",
     "require": {
         "php": ">=5.3",
-        "symfony/symfony1": ">=1.1",
         "symfony/symfony": ">=2.3",
         "doctrine/doctrine-bundle": ">=1.2.0",
         "doctrine/orm": ">=2.3"
     },
+    "require-dev": {
+        "symfony/symfony1": ">=1.1"
+    },
     "minimum-stability": "stable",
-    "repositories": [
-        {
-            "type":"composer",
-            "url": "http://packagist.hostnetbv.nl"
-        }
-    ],
     "autoload": {
         "psr-0": {
-            "Hostnet\\HnEntitiesPlugin": "src/"
-        }
-    },
-    "config": {
-        "github-oauth": {
-            "github.com": "24e3cb387f717ceafba3d698fea75ddac7dfd2f9"
+            "Hostnet\\HnDependencyInjectionPlugin": "src/"
         }
     }
 }
