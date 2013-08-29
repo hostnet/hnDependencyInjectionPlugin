@@ -7,6 +7,10 @@ use Hostnet\HnEntitiesPlugin\ApplicationConfiguration;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
+/**
+ * Subclass of sfActions, adds functions to access the DI controller
+ * @author Nico Schoenmaker <nico@hostnet.nl>
+ */
 class Actions extends \sfActions
 {
   protected function get($id, $invalid_behavior = ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE)

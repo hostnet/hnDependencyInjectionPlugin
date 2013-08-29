@@ -2,10 +2,11 @@
 namespace Hostnet\HnEntitiesPlugin;
 
 /**
- * We need a custom config cache
- * - We want to skip the symfony 1 cache, and only use the Symfony2 cache!
- * - If you use this plugin your config will house in apps/<app>/config/config.yml
- *   Didn't want to leave an empty file. The default \sfConfigCache checks whether it exists..
+ * Reads database configuration from the Symfony2 doctrine configuration
+ * Symfony 2 config is located in apps/<app>/config/config.yml
+ *
+ * You can remove databases.yml when using this plugin
+ * @author Nico Schoenmaker <nico@hostnet.nl>
  */
 class ConfigCache extends \sfConfigCache
 {

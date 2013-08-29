@@ -5,6 +5,7 @@ use Doctrine\ORM\QueryBuilder;
 
 /**
  * Paginator for Doctrine 2.3+
+ * @author Nico Schoenmaker <nico@hostnet.nl>
  */
 class DoctrinePager extends \sfPager
 {
@@ -12,6 +13,9 @@ class DoctrinePager extends \sfPager
 
   private $result_query;
 
+  /**
+   * @param QueryBuilder $query_builder The query to paginate
+   */
   public function setQueryBuilder(QueryBuilder $query_builder)
   {
     $this->query_builder = $query_builder;

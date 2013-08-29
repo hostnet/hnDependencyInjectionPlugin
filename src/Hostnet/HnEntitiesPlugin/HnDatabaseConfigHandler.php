@@ -25,14 +25,10 @@ use Doctrine\Bundle\DoctrineBundle\DependencyInjection\DoctrineExtension;
  *
  * If you want to develop on this class, please note that this is very early in the sf1 initialization
  * So you can't use much more then sfConfig::get('sf_environment');
+ * @author Nico Schoenmaker <nico@hostnet.nl>
  */
 class HnDatabaseConfigHandler
 {
-  /**
-   * @todo make this dynamic
-   */
-  const DATABASE_ENGINE = 'mysql';
-
   /**
    * @var ContainerInterface
    */

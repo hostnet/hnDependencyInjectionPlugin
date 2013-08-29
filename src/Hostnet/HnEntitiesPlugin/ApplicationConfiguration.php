@@ -26,6 +26,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  * Use this class as your superclass for your ApplicationConfiguration
  *
  * Adds a ->getContainer() function
+ * @author Nico Schoenmaker <nico@hostnet.nl>
  */
 class ApplicationConfiguration extends \sfApplicationConfiguration
 {

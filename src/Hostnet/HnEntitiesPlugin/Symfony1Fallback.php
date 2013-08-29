@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Does a fallback to Symfony 1 if there was no route found in Symfony 2
+ * @author Nico Schoenmaker <nico@hostnet.nl>
  */
 class Symfony1Fallback
 {

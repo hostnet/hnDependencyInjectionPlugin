@@ -17,6 +17,9 @@ use Symfony\Component\HttpKernel\Kernel;
 /**
  * A nice starting point if you want to build a kernel for a Symfony1
  * application
+ *
+ * You probably want to override registerBundles() to add your own bundles
+ * @author Nico Schoenmaker <nico@hostnet.nl>
  */
 class Symfony1Kernel extends Kernel implements CachedKernelInterface
 {
@@ -24,6 +27,9 @@ class Symfony1Kernel extends Kernel implements CachedKernelInterface
 
   private $is_fresh = true;
 
+  /**
+   * @param \sfApplicationConfiguration $configuration
+   */
   public function __construct(\sfApplicationConfiguration $configuration)
   {
     $environment = \sfConfig::get('sf_environment');
@@ -87,6 +93,10 @@ class Symfony1Kernel extends Kernel implements CachedKernelInterface
     );
   }
 
+  /**
+   * Ensures stuff from the apps/<app>/config/ dir can be loaded
+   * @see \Symfony\Component\HttpKernel\Kernel::getContainerLoader()
+   */
   protected function getContainerLoader(ContainerInterface $container)
   {
     $locator = new FileLocator($this->getConfigDir());
@@ -97,6 +107,8 @@ class Symfony1Kernel extends Kernel implements CachedKernelInterface
   }
 
   /**
+   * Loads apps/<app>/config/config_<env>.yml, with a fallback to apps/<app>/config/config.yml
+   * Also loads our own services.yml
    *
    * @see \Symfony\Component\HttpKernel\KernelInterface::registerContainerConfiguration()
    */
