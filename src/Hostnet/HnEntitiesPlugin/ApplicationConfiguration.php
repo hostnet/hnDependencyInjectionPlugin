@@ -48,8 +48,10 @@ class ApplicationConfiguration extends \sfApplicationConfiguration
      * @see HttpKernelInterface::handle();
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function handle(Request $request,
-            $type = HttpKernelInterface::MASTER_REQUEST, $catch = true)
+    public function handle(
+        Request $request,
+        $type = HttpKernelInterface::MASTER_REQUEST,
+        $catch = true)
     {
         return $this->getKernel()->handle($request, $type, $catch);
     }
@@ -66,9 +68,9 @@ class ApplicationConfiguration extends \sfApplicationConfiguration
             $this->kernel = $this->createKernel();
             if (! $this->kernel instanceof CachedKernelInterface) {
                 throw new \RuntimeException(
-                        sprintf(
-                                'The kernel that was built should have been of CachedKernelInterface, got %s',
-                                get_class($this->kernel)));
+                    sprintf(
+                        'The kernel that was built should have been of CachedKernelInterface, got %s',
+                        get_class($this->kernel)));
             }
         }
         return $this->kernel;

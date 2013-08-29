@@ -12,7 +12,6 @@ interface CachedKernelInterface extends KernelInterface
 {
 
     /**
-     *
      * @return bool Whether the cache is still fresh
      */
     public function isFresh();

@@ -12,7 +12,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class Actions extends \sfActions
 {
-
     protected function get($id, $invalid_behavior = ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE)
     {
         $config = $this->getContext()->getConfiguration();
@@ -21,7 +20,7 @@ class Actions extends \sfActions
             return $config->getContainer()->get($id, $invalid_behavior);
         }
         throw new \DomainException(
-                'Your app config should extend ApplicationConfiguration');
+            'Your app config should extend ApplicationConfiguration');
     }
 
     /**

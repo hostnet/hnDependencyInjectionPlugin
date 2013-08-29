@@ -64,13 +64,12 @@ class DoctrinePager extends \sfPager
         $result = $builder->getQuery()->execute();
         if (! isset($result[0][1])) {
             throw new \RuntimeException(
-                    sprintf(
-                            'The indice [0][1] is supposed to have the count in it! %s',
-                            json_encode($result)));
+                sprintf(
+                    'The indice [0][1] is supposed to have the count in it! %s',
+                    json_encode($result)));
         }
         $count = $result[0][1];
-        $this->setNbResults(
-                $has_max_record_limit ? min($count, $max_record_limit) : $count);
+        $this->setNbResults($has_max_record_limit ? min($count, $max_record_limit) : $count);
 
         $builder = $this->getNewQueryBuilder();
         $builder->setFirstResult(0);
@@ -79,8 +78,7 @@ class DoctrinePager extends \sfPager
         if (($this->getPage() == 0 || $this->getMaxPerPage() == 0)) {
             $this->setLastPage(0);
         } else {
-            $this->setLastPage(
-                    ceil($this->getNbResults() / $this->getMaxPerPage()));
+            $this->setLastPage(ceil($this->getNbResults() / $this->getMaxPerPage()));
 
             $offset = ($this->getPage() - 1) * $this->getMaxPerPage();
             $builder->setFirstResult($offset);

@@ -52,9 +52,8 @@ class ConfigCache extends \sfConfigCache
     }
 
     /**
-     * Override this hook in order to override the config handler if you need to
-     * Override ApplicationConfiguration::getConfigCache to be able to override
-     * this class
+     * Creates the database config handler
+     * Override this hook if you prefer a different one :)
      *
      * @return \Hostnet\HnEntitiesPlugin\HnDatabaseConfigHandler
      */

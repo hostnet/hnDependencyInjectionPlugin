@@ -27,7 +27,6 @@ class Symfony1Kernel extends Kernel implements CachedKernelInterface
     private $is_fresh = true;
 
     /**
-     *
      * @param \sfApplicationConfiguration $configuration
      */
     public function __construct(\sfApplicationConfiguration $configuration)
@@ -55,7 +54,6 @@ class Symfony1Kernel extends Kernel implements CachedKernelInterface
     }
 
     /**
-     *
      * @see \Symfony\Component\HttpKernel\Kernel::getCacheDir()
      */
     public function getCacheDir()
@@ -64,7 +62,6 @@ class Symfony1Kernel extends Kernel implements CachedKernelInterface
     }
 
     /**
-     *
      * @see \Symfony\Component\HttpKernel\Kernel::getLogDir()
      */
     public function getLogDir()
