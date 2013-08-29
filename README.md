@@ -19,7 +19,7 @@ hnDependencyInjectionPlugin
    ```
    public function getKernel()
    {
-       return new MyKernel();
+       return new MyKernel($this);
    }
    ```
    ```
