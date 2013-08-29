@@ -58,6 +58,7 @@ hnDependencyInjectionPlugin
    ```
    That way Doctrine knows where to find your entities.
 9. Be sure to set up your permissions properly, see "[Setting up your permissions](http://symfony.com/doc/current/book/installation.html#configuration-and-setup)".
+10. After this is done we can do a little cleanup. To prevent confusion you should remove ```config/databases.yml```, since only the Symfony 2 configuration is read at this point.
 
 ### Changelog
 
