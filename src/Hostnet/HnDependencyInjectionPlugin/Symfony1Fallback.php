@@ -38,7 +38,11 @@ class Symfony1Fallback
     public function fallbackToSymfony1()
     {
         $configuration = $this->kernel->getConfiguration();
-        \sfContext::createInstance($configuration)->dispatch();
+        $context = \sfContext::createInstance($configuration);
+        try {
+            $context->dispatch();
+        } catch(\sfStopException $e) {
+        }
 
         // Symfony1 will usually send headers for us, lets keep Symfony2
         // busy with an empty response :p
