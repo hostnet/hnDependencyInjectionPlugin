@@ -43,13 +43,24 @@ class Symfony1Fallback
             $context->dispatch();
         } catch(\sfStopException $e) {
         }
+        $code = 0;
+        if ($context->getResponse() instanceof \sfWebResponse) {
+            $web_response = $context->getResponse();
+            /* @var $web_response \sfWebResponse */
+            $code = $web_response->getStatusCode();
+        }
 
-        // Symfony1 will usually send headers for us, lets keep Symfony2
-        // busy with an empty response :p
-        // For some ajax requests it doesn't, dunno why, but thats why the
-        // 200 status code.
+        // Symfony1 will usually send headers for us
+        //Check if found response code is a known SF2 response code
+        if (!isset(Response::$statusTexts[$code])) {
+            // But for some reason it appears not to be, lets keep Symfony2
+            // busy with an empty response :p
+            // For some ajax requests it doesn't, dunno why, but thats why the
+            // 200 status code.
+            $code = 200;
+        }
         $response = new Response();
-        $response->headers->set('X-Status-Code', 200);
+        $response->headers->set('X-Status-Code', $code);
         return $response;
     }
 
