@@ -1,0 +1,5 @@
+services:
+    kernel.listener.debug_url_tracker:
+        class: Hostnet\HnDependencyInjectionPlugin\DebugUrlTracker
+        tags:
+            - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse, priority: -129 }

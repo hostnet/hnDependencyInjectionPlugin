@@ -2,6 +2,8 @@
 namespace Hostnet\HnDependencyInjectionPlugin;
 
 use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\HttpKernel\TerminableInterface;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Dumper\PhpDumper;
@@ -19,7 +21,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  *
  * @author Nico Schoenmaker <nico@hostnet.nl>
  */
-class ApplicationConfiguration extends \sfApplicationConfiguration
+class ApplicationConfiguration extends \sfApplicationConfiguration implements TerminableInterface
 {
 
     private $kernel;
@@ -54,6 +56,14 @@ class ApplicationConfiguration extends \sfApplicationConfiguration
         $catch = true)
     {
         return $this->getKernel()->handle($request, $type, $catch);
+    }
+
+    public function terminate(
+        Request $request,
+        Response $response
+        )
+    {
+        return $this->getKernel()->terminate($request, $response);
     }
 
     /**

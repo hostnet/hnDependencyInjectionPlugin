@@ -114,6 +114,10 @@ class Symfony1Kernel extends Kernel implements CachedKernelInterface
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
         $loader->load(__DIR__ . '/config/services.yml');
+        if($this->isDebug()) {
+            // Also add the debug services
+            $loader->load(__DIR__ . '/config/services_debug.yml');
+        }
 
         $path = $this->getConfigDir();
         $resource = 'config_' . $this->environment . '.yml';
