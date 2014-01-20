@@ -62,6 +62,64 @@ hnDependencyInjectionPlugin
 
 ### Changelog
 
+1.1.0
+- Added a web debug panel with a link to the Symfony 2 profiler.
+
+For this you need to activate the WebProfilerBundle, which you should only activate in dev
+```
+if ($this->getEnvironment() == 'dev') {
+    $bundles[] = new Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
+}
+```
+
+Then you need to configure the WebProfilerBundle and the profiler; add this to your config_dev.yml:
+```
+web_profiler:
+    toolbar: true
+framework:
+    router:   { resource: "%kernel.root_dir%/../config/sf2_routing_dev.yml" }
+    profiler:
+        only_exceptions: false
+        only_master_requests: true
+```
+
+Add this to ```sf2_routing_dev.yml``` to make the WebProfilerBundle accessible:
+```
+_wdt:
+    resource: "@WebProfilerBundle/Resources/config/routing/wdt.xml"
+    prefix:   /_wdt
+
+_profiler:
+    resource: "@WebProfilerBundle/Resources/config/routing/profiler.xml"
+    prefix:   /_profiler
+
+_main:
+    resource: sf2_routing.yml
+```
+
+And in web/*.php, replace ```$configuration->handle($request)->send();``` with:
+```
+$response = $configuration->handle($request);
+$response->send();
+$configuration->terminate($request, $response);
+```
+Finally, in your ```apps/<app>/config/<app>Configuration``` add the Symfony1Panel.
+
+```
+public function configure()
+{
+    $this->dispatcher->connect('debug.web.load_panels', array($this, 'configureWebDebugToolbar'));
+}
+
+public function configureWebDebugToolbar(sfEvent $event)
+{
+    $webDebugToolbar = $event->getSubject();
+    $webDebugToolbar->setPanel('sf2', new Symfony1Panel($webDebugToolbar));
+}
+```
+
+You should now have a new panel in the Symfony 1 web debug toolbar with a link to the Symfony 2 profiler!
+
 1.0.0
 - First official release
 
