@@ -31,9 +31,16 @@ class DebugUrlTracker
         $response_headers = $event->getResponse()->headers;
         if ($response_headers->has('x-debug-token-link')) {
             $this->url = $response_headers->get('x-debug-token-link');
-            echo '<script>document.querySelector("#sfWebDebugDetails a[title=sf2]").href=' .
-                     json_encode($response_headers->get('x-debug-token-link')) .
-                     '</script>';
+            $link = json_encode($response_headers->get('x-debug-token-link'));
+            echo <<<JAVASCRIPT
+<script>
+(function() {
+  var element = document.querySelector("#sfWebDebugDetails a[title=sf2]");
+  element.href= $link;
+  element.onclick='';
+}())
+</script>
+JAVASCRIPT;
         }
     }
 }
