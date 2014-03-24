@@ -1,6 +1,7 @@
 <?php
 namespace Hostnet\HnDependencyInjectionPlugin;
 
+use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\TerminableInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -11,7 +12,6 @@ use Symfony\Component\Config\ConfigCache as Symfony2ConfigCache;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\Config\Loader\LoaderResolver;
 use Symfony\Component\Config\FileLocator;
-use Doctrine\Bundle\DoctrineBundle\DependencyInjection\DoctrineExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
@@ -24,7 +24,15 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 class ApplicationConfiguration extends \sfApplicationConfiguration implements TerminableInterface
 {
 
+    /**
+     * @var \Hostnet\HnDependencyInjectionPlugin\CachedKernelInterface
+     */
     private $kernel;
+
+    /**
+     * @var \Symfony\Bundle\FrameworkBundle\Console\Application
+     */
+    private $cli_application;
 
     /**
      * @return CachedKernelInterface
@@ -56,6 +64,14 @@ class ApplicationConfiguration extends \sfApplicationConfiguration implements Te
         $catch = true)
     {
         return $this->getKernel()->handle($request, $type, $catch);
+    }
+
+    public function getCLIApplication()
+    {
+        if (! $this->cli_application) {
+            $this->cli_application = new Application($this->getKernel());
+        }
+        return $this->cli_application;
     }
 
     public function terminate(
