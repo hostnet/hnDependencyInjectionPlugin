@@ -62,6 +62,9 @@ hnDependencyInjectionPlugin
 
 ### Changelog
 
+2.0.0
+- Removed the Symfony1Panel class, it's added automatically now.
+
 1.1.0
 - Added a web debug panel with a link to the Symfony 2 profiler.
 
@@ -102,20 +105,6 @@ And in web/*.php, replace ```$configuration->handle($request)->send();``` with:
 $response = $configuration->handle($request);
 $response->send();
 $configuration->terminate($request, $response);
-```
-Finally, in your ```apps/<app>/config/<app>Configuration``` add the Symfony1Panel.
-
-```
-public function configure()
-{
-    $this->dispatcher->connect('debug.web.load_panels', array($this, 'configureWebDebugToolbar'));
-}
-
-public function configureWebDebugToolbar(sfEvent $event)
-{
-    $webDebugToolbar = $event->getSubject();
-    $webDebugToolbar->setPanel('sf2', new Symfony1Panel($webDebugToolbar));
-}
 ```
 
 You should now have a new panel in the Symfony 1 web debug toolbar with a link to the Symfony 2 profiler!
