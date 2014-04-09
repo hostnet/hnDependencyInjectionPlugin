@@ -30,8 +30,9 @@ class DebugUrlTracker
         }
         $response_headers = $event->getResponse()->headers;
         if ($response_headers->has('x-debug-token-link')
-            // Only add when the symfony 1 content type is not javascrupt
+            // Only add when the symfony 1 content type is not javascript
             && strpos(\sfContext::getInstance()->getResponse()->getContentType(), 'javascript') === false
+            && (!$event->getRequest()->isXmlHttpRequest()) // Prevent Ajax from creating another bar
         ) {
             $this->url = $response_headers->get('x-debug-token-link');
             $link = json_encode($response_headers->get('x-debug-token-link'));
