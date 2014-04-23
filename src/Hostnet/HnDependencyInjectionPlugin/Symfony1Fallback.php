@@ -43,11 +43,22 @@ class Symfony1Fallback
             $context->dispatch();
         } catch(\sfStopException $e) {
         }
+
         $code = 0;
+        $response = new Response();
+
         if ($context->getResponse() instanceof \sfWebResponse) {
             $web_response = $context->getResponse();
             /* @var $web_response \sfWebResponse */
             $code = $web_response->getStatusCode();
+
+            // If we're trying to redirect to another location, set the statuscode and header in the symfony2 response
+            // properly, because this response is overwriting the sf1 response if the content of the body is less than
+            // 4kb large due to output buffering.
+            if (($code === 302 || $code === 304)) {
+                $response->setStatusCode($code, Response::$statusTexts[$code]);
+                $response->headers->set('Location', $web_response->getHttpHeader('Location'));
+            }
         }
 
         // Symfony1 will usually send headers for us
@@ -59,7 +70,7 @@ class Symfony1Fallback
             // 200 status code.
             $code = 200;
         }
-        $response = new Response();
+
         $response->headers->set('X-Status-Code', $code);
         return $response;
     }
