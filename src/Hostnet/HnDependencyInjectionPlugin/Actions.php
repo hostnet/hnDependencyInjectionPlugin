@@ -34,4 +34,20 @@ class Actions extends \sfActions
     {
         return $this->get('doctrine');
     }
+
+    /**
+     * Get a parameter from the service container
+     * @throws \DomainException if the configuration is no ApplicationConfiguration
+     * @throws \InvalidArgumentException if the parameter is not found
+     */
+    protected function getParameter($name)
+    {
+        $config = $this->getContext()->getConfiguration();
+
+        if ($config instanceof ApplicationConfiguration) {
+            return $config->getContainer()->getParameter($name);
+        }
+        throw new \DomainException(
+            'Your app config should extend ApplicationConfiguration');
+    }
 }
