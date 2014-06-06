@@ -1,0 +1,12 @@
+<phpunit colors="true" bootstrap="test/bootstrap.php">
+    <testsuites>
+        <testsuite name="hnDependencyInjectionPlugin test suite">
+            <directory>./test</directory>
+        </testsuite>
+    </testsuites>
+    <filter>
+        <whitelist>
+           <directory>./src</directory>
+        </whitelist>
+    </filter>
+</phpunit>
