@@ -22,18 +22,13 @@
         "doctrine/orm": ">=2.3"
     },
     "require-dev": {
-        "symfony/symfony1": ">=1.1"
+        "symfony/symfony1": ">=1.1",
+        "phpunit/phpunit" : "4.*"
     },
     "minimum-stability": "stable",
     "autoload": {
         "psr-0": {
             "Hostnet\\HnDependencyInjectionPlugin": "src/"
         }
-    },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/hostnet/symfony1"
-        }
-    ]
+    }
 }
