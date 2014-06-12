@@ -4,6 +4,9 @@ hnDependencyInjectionPlugin
 - Transforms a Symfony 2 doctrine configuration into a format readable for Symfony 1.x.
   Use Doctrine entities and propel classes with the same database configuration!
 
+[![Total Downloads](https://poser.pugx.org/hostnet/hn-dependency-injection-plugin/downloads.png)](https://packagist.org/packages/hostnet/hn-dependency-injection-plugin)
+[![Build Status](https://travis-ci.org/hostnet/hnDependencyInjectionPlugin.svg?branch=master)](https://travis-ci.org/hostnet/hnDependencyInjectionPlugin)
+
 ### Installation
 1. [Download Composer][1].
 2. Add to your composer.json
