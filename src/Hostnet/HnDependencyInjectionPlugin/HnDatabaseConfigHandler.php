@@ -150,7 +150,7 @@ class HnDatabaseConfigHandler
     private function getPropelDriverName(Driver $driver)
     {
         $lookup_table = array(
-            'pdo_mysql' => 'mysql',
+            'pdo_mysql' => 'mysqli',
             'pdo_pgsql' => 'pgsql',
             'pdo_sqlite' => 'sqlite'
         );
