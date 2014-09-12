@@ -1,6 +1,7 @@
 <?php
 namespace Hostnet\HnDependencyInjectionPlugin;
 
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Hostnet\HnDependencyInjectionPlugin\ApplicationConfiguration;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -31,5 +32,32 @@ class Components extends \sfComponents
         }
         throw new \DomainException(
             'Your app config should extend ApplicationConfiguration');
+    }
+    /**
+     * Shortcut to return the Doctrine Registry service.
+     *
+     * return ManagerRegistry
+     *
+     * @throws \LogicException If DoctrineBundle is not available
+     */
+    protected function getDoctrine()
+    {
+        return $this->get('doctrine');
+    }
+
+    /**
+     * Get a parameter from the service container
+     * @throws \DomainException if the configuration is no ApplicationConfiguration
+     * @throws \InvalidArgumentException if the parameter is not found
+     */
+    protected function getParameter($name)
+    {
+        $config = $this->getContext()->getConfiguration();
+
+        if ($config instanceof ApplicationConfiguration) {
+            return $config->getContainer()->getParameter($name);
+        }
+        throw new \DomainException(
+                'Your app config should extend ApplicationConfiguration');
     }
 }
