@@ -1,6 +1,7 @@
 <?php
 namespace Hostnet\HnDependencyInjectionPlugin;
 
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Hostnet\HnDependencyInjectionPlugin\ApplicationConfiguration;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -35,7 +36,7 @@ class Components extends \sfComponents
     /**
      * Shortcut to return the Doctrine Registry service.
      *
-     * @return Registry
+     * return ManagerRegistry
      *
      * @throws \LogicException If DoctrineBundle is not available
      */
