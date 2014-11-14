@@ -21,7 +21,7 @@ class Symfony1Fallback
     /**
      * @var bool
      */
-    private $router_matched_sf1 = false;
+    private $first_controller_is_sf1 = null;
 
     /**
      * @param Symfony1Kernel $kernel
@@ -40,9 +40,18 @@ class Symfony1Fallback
      */
     public function onKernelController(FilterControllerEvent $event)
     {
-        if ($event->getController()[0] === $this) {
-            $this->router_matched_sf1 = true;
+        $controller = $event->getController();
+
+        // we just want to know the first call
+        if (null !== $this->first_controller_is_sf1) {
+            return;
         }
+
+        if (is_array($controller) && $event->getController()[0] === $this) {
+            $this->first_controller_is_sf1 = true;
+        }
+
+        $this->first_controller_is_sf1 = false;
     }
 
     /**
@@ -113,7 +122,7 @@ class Symfony1Fallback
         // that means a 404 exception and no sf1 matching route via "sf1",
         // it should not try to go into sf1 because we explicitly threw
         // a 404 exception in our controller (or code).
-        if (!$this->router_matched_sf1) {
+        if (null !== $this->first_controller_is_sf1) {
             return;
         }
 
