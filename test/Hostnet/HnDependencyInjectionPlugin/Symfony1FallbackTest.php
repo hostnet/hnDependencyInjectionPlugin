@@ -28,8 +28,8 @@ class Symfony1FallbackTest extends \PHPUnit_Framework_TestCase
 
         $this->fallback = $this
             ->getMockBuilder('Hostnet\HnDependencyInjectionPlugin\Symfony1Fallback')
-            ->setConstructorArgs([$sf1_kernel])
-            ->setMethods(['fallbackToSymfony1'])
+            ->setConstructorArgs(array($sf1_kernel))
+            ->setMethods(array('fallbackToSymfony1'))
             ->getMock();
     }
 
