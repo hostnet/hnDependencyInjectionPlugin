@@ -4,6 +4,7 @@ services:
         arguments: [@kernel]
         tags:
             - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }
+            - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }
 
     kernel.listener.cache_warmer:
         class: Hostnet\HnDependencyInjectionPlugin\CacheWarmer
