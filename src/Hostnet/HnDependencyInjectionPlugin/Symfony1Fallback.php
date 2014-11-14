@@ -21,7 +21,7 @@ class Symfony1Fallback
     /**
      * @var bool
      */
-    private $first_controller_is_sf1 = null;
+    private $fallback_on_404 = true;
 
     /**
      * @param Symfony1Kernel $kernel
@@ -32,26 +32,14 @@ class Symfony1Fallback
     }
 
     /**
-     * Keeps track of whether symfony1 has been initialized already
-     *
-     * This can be used to track back on whether to handle the 404 here or in sf1
+     * When a controller has been called, it shouldn't
+     * fall back to Symfony1 on kernel exceptions
      *
      * @param FilterControllerEvent $event
      */
     public function onKernelController(FilterControllerEvent $event)
     {
-        $controller = $event->getController();
-
-        // we just want to know the first call
-        if (null !== $this->first_controller_is_sf1) {
-            return;
-        }
-
-        if (is_array($controller) && $event->getController()[0] === $this) {
-            $this->first_controller_is_sf1 = true;
-        }
-
-        $this->first_controller_is_sf1 = false;
+        $this->fallback_on_404 = false;
     }
 
     /**
@@ -119,10 +107,11 @@ class Symfony1Fallback
         }
 
         // Unique case here; If symfony2 has been initialized properly,
-        // that means a 404 exception and no sf1 matching route via "sf1",
         // it should not try to go into sf1 because we explicitly threw
         // a 404 exception in our controller (or code).
-        if (null !== $this->first_controller_is_sf1) {
+        // A proper initialization means that it didn't match a "sf1"
+        // route and didn't 404
+        if (false === $this->fallback_on_404) {
             return;
         }
 
