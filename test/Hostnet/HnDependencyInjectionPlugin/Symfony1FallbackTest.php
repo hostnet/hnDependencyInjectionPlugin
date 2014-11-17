@@ -49,7 +49,8 @@ class Symfony1FallbackTest extends \PHPUnit_Framework_TestCase
     {
         $this->fallback
             ->expects($this->once())
-            ->method('fallbackToSymfony1');
+            ->method('fallbackToSymfony1')
+            ->willThrowException(new NotFoundHttpException('hans'));
 
         $event = $this->buildResponseEvent(new NotFoundHttpException('henk'));
         $this->fallback->onKernelException($event);
@@ -74,6 +75,7 @@ class Symfony1FallbackTest extends \PHPUnit_Framework_TestCase
 
         $this->assertFalse($event3->isPropagationStopped());
     }
+
     public function testOnKernelExceptionSf1InitResponse()
     {
         $this->fallback

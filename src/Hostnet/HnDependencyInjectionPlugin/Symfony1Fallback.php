@@ -1,10 +1,10 @@
 <?php
 namespace Hostnet\HnDependencyInjectionPlugin;
 
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Does a fallback to Symfony 1 if there was no route found in Symfony 2
@@ -35,6 +35,9 @@ class Symfony1Fallback
      * When a controller has been called, it shouldn't
      * fall back to Symfony1 on kernel exceptions
      *
+     * This makes it only possible for an unmatched route
+     * to trigger the kernel.exception
+     *
      * @param FilterControllerEvent $event
      */
     public function onKernelController(FilterControllerEvent $event)
@@ -43,6 +46,38 @@ class Symfony1Fallback
     }
 
     /**
+     * Fires on the kernel.exception event
+     *
+     * @param GetResponseForExceptionEvent $event
+     */
+    public function onKernelException(GetResponseForExceptionEvent $event)
+    {
+        if (!$event->getException() instanceof NotFoundHttpException) {
+            return;
+        }
+
+        // Unique case here; If symfony2 has been initialized properly,
+        // it should not try to go into sf1 because we explicitly threw
+        // a 404 exception in our controller (or code). Initialization
+        // means that it didn't match a "sf1" route and didn't 404
+        if (false === $this->fallback_on_404) {
+            return;
+        }
+
+        try {
+            $response = $this->fallbackToSymfony1();
+        } catch (NotFoundHttpException $e) {
+            // in case sf1 can't allocate the route, it gets wrapped in this $e
+            return;
+        }
+
+        $event->setResponse($response);
+    }
+
+    /**
+     * This method serves as action and is called from kernel.exception if the
+     * route was not found in the first controller.
+     *
      * To be able to create routes to Symfony 1 from Symfony 2,
      * you can create a Symfony 2 routing rule like this:
      * sf1:
@@ -59,8 +94,10 @@ class Symfony1Fallback
         try {
             $context->dispatch();
         } catch(\sfError404Exception $e) {
-            // the page was actually not found in sf1
-            return;
+            // The page was actually not found in sf1, to trigger this case,
+            // change sf1 to use a different front controller that doesn't
+            // catch this exception. This will prevent the 404 forward in sf1
+            throw new NotFoundHttpException('Unable to allocate route in symfony1 fallback', $e);
         } catch(\sfStopException $e) {
         }
 
@@ -82,44 +119,15 @@ class Symfony1Fallback
         }
 
         // Symfony1 will usually send headers for us
-        //Check if found response code is a known SF2 response code
+        // Check if found response code is a known SF2 response code
         if (!isset(Response::$statusTexts[$code])) {
-            // But for some reason it appears not to be, lets keep Symfony2
-            // busy with an empty response :p
-            // For some ajax requests it doesn't, dunno why, but thats why the
+            // Lets keep sf2 busy with an empty response. For some ajax
+            // requests it doesn't give a valid code, but thats why the
             // 200 status code.
             $code = 200;
         }
 
         $response->headers->set('X-Status-Code', $code);
         return $response;
-    }
-
-    /**
-     * Fires on the kernel.exception event
-     *
-     * @param GetResponseForExceptionEvent $event
-     */
-    public function onKernelException(GetResponseForExceptionEvent $event)
-    {
-        if (!$event->getException() instanceof NotFoundHttpException) {
-            return;
-        }
-
-        // Unique case here; If symfony2 has been initialized properly,
-        // it should not try to go into sf1 because we explicitly threw
-        // a 404 exception in our controller (or code).
-        // A proper initialization means that it didn't match a "sf1"
-        // route and didn't 404
-        if (false === $this->fallback_on_404) {
-            return;
-        }
-
-        // check if symfony1 doesn't want to handle the 404, need to continue here otherwise
-        if (null === ($response = $this->fallbackToSymfony1())) {
-            return;
-        }
-
-        $event->setResponse($response);
     }
 }
