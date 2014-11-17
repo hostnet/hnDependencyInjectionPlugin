@@ -56,10 +56,8 @@ class Symfony1Fallback
             return;
         }
 
-        // Unique case here; If symfony2 has been initialized properly,
-        // it should not try to go into sf1 because we explicitly threw
-        // a 404 exception in our controller (or code). Initialization
-        // means that it didn't match a "sf1" route and didn't 404
+        // Only fall back to sf1 if no controller was called yet,
+        // prevents falling back again when sf1 throws a 404
         if (false === $this->fallback_on_404) {
             return;
         }
@@ -67,7 +65,7 @@ class Symfony1Fallback
         try {
             $response = $this->fallbackToSymfony1();
         } catch (NotFoundHttpException $e) {
-            // in case sf1 can't allocate the route, it gets wrapped in this $e
+            // in case sf1 can't match the route, ignore
             return;
         }
 
@@ -94,10 +92,8 @@ class Symfony1Fallback
         try {
             $context->dispatch();
         } catch(\sfError404Exception $e) {
-            // The page was actually not found in sf1, to trigger this case,
-            // change sf1 to use a different front controller that doesn't
-            // catch this exception. This will prevent the 404 forward in sf1
-            throw new NotFoundHttpException('Unable to allocate route in symfony1 fallback', $e);
+            // The page was actually not found in sf1, wrap it up nicely
+            throw new NotFoundHttpException('Unable to match route in symfony1 fallback', $e);
         } catch(\sfStopException $e) {
         }
 
@@ -119,7 +115,7 @@ class Symfony1Fallback
         }
 
         // Symfony1 will usually send headers for us
-        // Check if found response code is a known SF2 response code
+        // Check if found response code is a known sf2 response code
         if (!isset(Response::$statusTexts[$code])) {
             // Lets keep sf2 busy with an empty response. For some ajax
             // requests it doesn't give a valid code, but thats why the

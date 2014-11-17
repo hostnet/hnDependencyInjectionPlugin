@@ -55,7 +55,7 @@ hnDependencyInjectionPlugin
    and add the following to your ```config/ProjectConfiguration.php```.
    ```
    use Doctrine\Common\Annotations\AnnotationRegistry;
-   
+
    $loader = require __DIR__.'/../vendor/autoload.php';
    AnnotationRegistry::registerLoader(array($loader, 'loadClass'));
    ```
@@ -124,5 +124,35 @@ You should now have a new panel in the Symfony 1 web debug toolbar with a link t
 2. Go to the directory of the clone
 3. Run ```composer.phar install```
 4. Run ```phpunit```
+
+
+
+### Moving the error handling to Symfony 2
+
+When migrating, you will eventually hit a point where you want to log
+errors properly. By default the `sfFrontWebController` contains a try
+catch block where exceptions will be caught. In order to move all error
+handling to Symfony 2, you can create your own front controller. If you
+remove the try catch in this front controller, all errors will
+be caught by the Symfony 2 uncaught exception handler.
+
+If your route is matched with the sf1 route but sf1 doesn't know about the
+route, it will throw an `sf404ErrorException`. This exception will be caught
+and wrapped into an `HttpNotFoundException` and the `kernel.exception` will
+be fired eventually. This will make sure you can handle all exceptions in
+Symfony 2.
+
+Additionally, you can throw exceptions in sf1 such as `AccessDeniedException`,
+`NotFoundHttpException`, `\RuntimeException` etc. They will all be caught. In
+case of a 404 error, the sf1 fallback will only be triggered once and can only
+be triggered as a first controller. Once you've succesfully entered Symfony 2
+via either the sf1 route or the normal entry, it will no longer be initiated.
+
+To add the front controller, you will have to set it in `factories.yml`.
+```yml
+all:
+  controller:
+    class: MyCustomFrontController
+```
 
 [1]: http://getcomposer.org/doc/00-intro.md
