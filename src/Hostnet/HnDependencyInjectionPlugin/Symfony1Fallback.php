@@ -56,6 +56,10 @@ class Symfony1Fallback
             return;
         }
 
+        if ($this->kernel->getContainer()->hasParameter('hn_entities_enable_symfony2_404')) {
+            return;
+        }
+
         // Only fall back to sf1 if no controller was called yet,
         // prevents falling back again when sf1 throws a 404
         if (false === $this->fallback_on_404) {
