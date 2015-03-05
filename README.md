@@ -155,4 +155,10 @@ all:
     class: MyCustomFrontController
 ```
 
+To enable the Symfony2 404 handling, you will have to set the following parameter to true:
+```yml
+hn_entities_enable_symfony2_404: true
+```
+
+
 [1]: http://getcomposer.org/doc/00-intro.md
