@@ -85,8 +85,7 @@ class Actions extends \sfActions
         $doctrine = $this->getDoctrine();
         if ($doctrine instanceof Registry) {
             return $doctrine->getManager($manager_name)->getRepository($class_name);
-        } else {
-            throw new \LogicException('Doctrine Registry not available in Container');
         }
+        throw new \LogicException('Doctrine Registry not available in Container');
     }
 }
