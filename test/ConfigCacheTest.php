@@ -1,49 +1,38 @@
 <?php
+namespace Hostnet\HnDependencyInjectionPlugin;
 
-use Hostnet\HnDependencyInjectionPlugin\ConfigCache;
-
-class TestConfigCache extends ConfigCache
+class ConfigCacheTest extends \PHPUnit_Framework_TestCase
 {
-  public $handler;
-
-  public $args;
-
-  protected function createDatabaseHandler()
-  {
-    return $this->handler;
-  }
-
-  public function writeCacheFile($config, $cache, $data)
-  {
-    if(is_array($this->args)) {
-      throw new Exception('Only once please');
+    public function setUp()
+    {
+        \sfConfig::set('sf_root_dir', '/meh/the_root');
+        \sfConfig::set('sf_config_cache_dir', '/meh/the_root/cache');
     }
-    $this->args = func_get_args();
-  }
-}
 
-class ConfigCacheTest extends PHPUnit_Framework_TestCase
-{
-  public function setUp()
-  {
-    sfConfig::set('sf_root_dir', '/meh/the_root');
-    sfConfig::set('sf_config_cache_dir', '/meh/the_root/cache');
-  }
+    public function testCheckConfig()
+    {
+        $app_config = $this->getMockBuilder('Hostnet\HnDependencyInjectionPlugin\ApplicationConfiguration')
+            ->disableOriginalConstructor()
+            ->getMock();
 
-  public function testCheckConfig()
-  {
-    $app_config = $this->getMockBuilder('Hostnet\HnDependencyInjectionPlugin\ApplicationConfiguration')->
-        disableOriginalConstructor()->
-        getMock();
-    $handler = $this->getMockBuilder('Hostnet\HnDependencyInjectionPlugin\HnDatabaseConfigHandler')->disableOriginalConstructor()->getMock();
-    $handler->expects($this->once())->method('execute')->with()->
-        will($this->returnValue('muhaha'));
+        $handler = $this->getMockBuilder('Hostnet\HnDependencyInjectionPlugin\HnDatabaseConfigHandler')
+            ->disableOriginalConstructor()
+            ->getMock();
 
-    $configuration = new TestConfigCache($app_config);
-    $configuration->handler = $handler;
-    $this->assertEquals('/meh/the_root/cache/config_databases.yml.php',
-        $configuration->checkConfig('config/databases.yml'));
-    $expected = array('config/databases.yml', '/meh/the_root/cache/config_databases.yml.php', 'muhaha');
-    $this->assertEquals($expected, $configuration->args);
-  }
+        $handler->expects($this->once())
+                ->method('execute')
+                ->with()
+                ->will($this->returnValue('muhaha'));
+
+        $configuration          = new TestConfigCache($app_config);
+        $configuration->handler = $handler;
+
+        $this->assertEquals(
+            '/meh/the_root/cache/config_databases.yml.php',
+            $configuration->checkConfig('config/databases.yml')
+        );
+
+        $expected = array('config/databases.yml', '/meh/the_root/cache/config_databases.yml.php', 'muhaha');
+        $this->assertEquals($expected, $configuration->args);
+    }
 }

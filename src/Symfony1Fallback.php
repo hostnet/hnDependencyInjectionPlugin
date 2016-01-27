@@ -95,13 +95,23 @@ class Symfony1Fallback
         $context       = \sfContext::createInstance($configuration);
         try {
             $context->dispatch();
-        } catch(\sfError404Exception $e) {
+        } catch (\sfError404Exception $e) {
             // The page was actually not found in sf1, wrap it up nicely
             throw new NotFoundHttpException('Unable to match route in symfony1 fallback', $e);
-        } catch(\sfStopException $e) {
+        } catch (\sfStopException $e) {
+            return $this->createSymfony2Response($context);
         }
 
-        $code = 0;
+        return $this->createSymfony2Response($context);
+    }
+
+    /**
+     * @param \sfContext context
+     * @return Response
+     */
+    private function createSymfony2Response(\sfContext $context)
+    {
+        $code     = 0;
         $response = new Response();
 
         if ($context->getResponse() instanceof \sfWebResponse) {
@@ -113,14 +123,18 @@ class Symfony1Fallback
             // properly, because this response is overwriting the sf1 response if the content of the body is less than
             // 4kb large due to output buffering.
             if (($code === 302 || $code === 304)) {
+                // @codingStandardsIgnoreStart
                 $response->setStatusCode($code, Response::$statusTexts[$code]);
+                // @codingStandardsIgnoreEnd
                 $response->headers->set('Location', $web_response->getHttpHeader('Location'));
             }
         }
 
         // Symfony1 will usually send headers for us
         // Check if found response code is a known sf2 response code
+        // @codingStandardsIgnoreStart
         if (!isset(Response::$statusTexts[$code])) {
+        // @codingStandardsIgnoreEnd
             // Lets keep sf2 busy with an empty response. For some ajax
             // requests it doesn't give a valid code, but thats why the
             // 200 status code.

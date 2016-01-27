@@ -39,7 +39,7 @@ class CacheWarmer implements CacheWarmerInterface
     /**
      * @see \Symfony\Component\HttpKernel\CacheWarmer\WarmableInterface::warmUp()
      */
-    public function warmUp($cacheDir)
+    public function warmUp($cache_dir)
     {
         if ($this->configuration && ! \sfContext::hasInstance()) {
             \sfContext::createInstance($this->configuration);

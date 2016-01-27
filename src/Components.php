@@ -31,7 +31,8 @@ class Components extends \sfComponents
             return $config->getContainer()->get($id, $invalid_behavior);
         }
         throw new \DomainException(
-            'Your app config should extend ApplicationConfiguration');
+            'Your app config should extend ApplicationConfiguration'
+        );
     }
     /**
      * Shortcut to return the Doctrine Registry service.
@@ -58,6 +59,7 @@ class Components extends \sfComponents
             return $config->getContainer()->getParameter($name);
         }
         throw new \DomainException(
-                'Your app config should extend ApplicationConfiguration');
+            'Your app config should extend ApplicationConfiguration'
+        );
     }
 }
