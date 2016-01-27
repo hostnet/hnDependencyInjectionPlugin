@@ -79,7 +79,7 @@ class HnDatabaseConfigHandler
         $output = '';
         foreach ($connections as $name => $connection) {
             $config = array(
-                'dsn' => $this->formatDSN($connection),
+                'dsn' => $this->format11DSN($connection),
                 'name' => $name
             );
 
@@ -104,7 +104,7 @@ class HnDatabaseConfigHandler
 
             $dsn = sprintf(
                 '%s:dbname=%s;host=%s;port=%s',
-                $this->getPropelDriverName($connection->getDriver()),
+                $this->getPropel14DriverName($connection->getDriver()),
                 $connection->getDatabase(),
                 $connection->getHost(),
                 $connection->getPort()
@@ -148,9 +148,9 @@ class HnDatabaseConfigHandler
      * @todo make the mysql bit dynamic
      * @param Connection $connection
      */
-    private function formatDSN(Connection $connection)
+    private function format11DSN(Connection $connection)
     {
-        $driver_name = $this->getPropelDriverName($connection->getDriver());
+        $driver_name = $this->getPropel12DriverName($connection->getDriver());
         if ($connection->getDriver()->getName() == 'pdo_sqlite') {
             return sprintf(
                 '%s://hack.nl/%s',
@@ -172,17 +172,57 @@ class HnDatabaseConfigHandler
     }
 
     /**
+     * Return the proper drivername for Propel version 1.2
+     * If the mysql extension is not loaded, fall back to
+     * mysqli, thus being compatible with PHP 7.
+     *
+     * @param Driver $driver
+     * @throws \DomainException
+     * @throws \RuntimeException
+     * @return string
+     */
+    private function getPropel12DriverName(Driver $driver)
+    {
+        switch($driver->getName()) {
+            case 'pdo_mysql':
+                if (extension_loaded('mysql')) {
+                    return 'mysql';
+                } elseif(extension_loaded('mysqli')) {
+                    return 'mysqli';
+                } else {
+                    throw new \RuntimeException('The mysql and mysqli extension both not loaded, need one of them.');
+                }
+            case 'pdo_pgsql':
+                if (extension_loaded('pgsql')) {
+                    return 'pgsql';
+                } else {
+                    throw new \RuntimeException('The pgsql extension is not loaded.');
+                }
+                return 'pgsql';
+            case 'pdo_sqlite':
+                if (function_exists('sqlite_open')) {
+                    return 'sqlite';
+                } else {
+                    throw new \RuntimeException('The sqlite extension is not loaded.');
+                }
+            default:
+                throw new \DomainException(sprintf('Unknown driver "%s"', $driver->getName()));
+        }
+    }
+
+    /**
      * @param Driver $driver
      * @throws \DomainException
      * @return string
      */
-    private function getPropelDriverName(Driver $driver)
+    private function getPropel14DriverName(Driver $driver)
     {
         $lookup_table = array(
             'pdo_mysql' => 'mysql',
             'pdo_pgsql' => 'pgsql',
             'pdo_sqlite' => 'sqlite'
         );
+
         if (isset($lookup_table[$driver->getName()])) {
             return $lookup_table[$driver->getName()];
         }
