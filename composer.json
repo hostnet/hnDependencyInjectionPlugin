@@ -27,8 +27,13 @@
     },
     "minimum-stability": "stable",
     "autoload": {
-        "psr-0": {
-            "Hostnet\\HnDependencyInjectionPlugin": "src/"
+        "psr-4": {
+            "Hostnet\\HnDependencyInjectionPlugin\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Hostnet\\HnDependencyInjectionPlugin\\": "test/"
         }
     }
 }

@@ -1,14 +1,13 @@
 <?php
 namespace Hostnet\HnDependencyInjectionPlugin;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\Config\Loader\DelegatingLoader;
 use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
-use Symfony\Component\Config\Loader\LoaderInterface;
-use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
-use Symfony\Component\Config\Loader\LoaderResolver;
 use Symfony\Component\Config\FileLocator;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\Config\Loader\DelegatingLoader;
+use Symfony\Component\Config\Loader\LoaderInterface;
+use Symfony\Component\Config\Loader\LoaderResolver;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\HttpKernel\Kernel;
 
 /**
@@ -32,14 +31,16 @@ class Symfony1Kernel extends Kernel implements CachedKernelInterface
     public function __construct(\sfApplicationConfiguration $configuration)
     {
         $environment = \sfConfig::get('sf_environment');
-        $debug = in_array($environment,
+        $debug       = in_array(
+            $environment,
             array(
                     'dev',
                     'ontw',
                     'test'
-            ));
-        parent::__construct($environment, $debug);
-        $this->configuration = $configuration;
+            )
+        );
+            parent::__construct($environment, $debug);
+            $this->configuration = $configuration;
     }
 
     public function getConfiguration()
@@ -114,12 +115,12 @@ class Symfony1Kernel extends Kernel implements CachedKernelInterface
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
         $loader->load(__DIR__ . '/config/services.yml');
-        if($this->isDebug()) {
+        if ($this->isDebug()) {
             // Also add the debug services
             $loader->load(__DIR__ . '/config/services_debug.yml');
         }
 
-        $path = $this->getConfigDir();
+        $path     = $this->getConfigDir();
         $resource = 'config_' . $this->environment . '.yml';
         if (! file_exists($path . '/' . $resource)) {
             $resource = 'config.yml';

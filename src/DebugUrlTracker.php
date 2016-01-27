@@ -35,7 +35,7 @@ class DebugUrlTracker
             && (!$event->getRequest()->isXmlHttpRequest()) // Prevent Ajax from creating another bar
         ) {
             $this->url = $response_headers->get('x-debug-token-link');
-            $link = json_encode($response_headers->get('x-debug-token-link'));
+            $link      = json_encode($response_headers->get('x-debug-token-link'));
             echo <<<JAVASCRIPT
 <script>
 (function() {

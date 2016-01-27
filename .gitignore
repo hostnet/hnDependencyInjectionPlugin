@@ -1,6 +1,4 @@
 /vendor/
 /cache/
-/.buildpath
-/.project
-/.settings/
 /composer.lock
+/phpcs.xml

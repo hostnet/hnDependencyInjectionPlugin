@@ -54,7 +54,7 @@ class DoctrinePager extends \sfPager
     public function init()
     {
         $has_max_record_limit = ($this->getMaxRecordLimit() !== false);
-        $max_record_limit = $this->getMaxRecordLimit();
+        $max_record_limit     = $this->getMaxRecordLimit();
 
         $builder = $this->getNewQueryBuilder();
         $builder->setFirstResult(0);
@@ -66,7 +66,9 @@ class DoctrinePager extends \sfPager
             throw new \RuntimeException(
                 sprintf(
                     'The indice [0][1] is supposed to have the count in it! %s',
-                    json_encode($result)));
+                    json_encode($result)
+                )
+            );
         }
         $count = $result[0][1];
         $this->setNbResults($has_max_record_limit ? min($count, $max_record_limit) : $count);

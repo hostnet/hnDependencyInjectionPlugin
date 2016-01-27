@@ -1,13 +1,12 @@
 <?php
-
 namespace Hostnet\HnDependencyInjectionPlugin;
 
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 
 /**
  * @covers Hostnet\HnDependencyInjectionPlugin\Symfony1Fallback
@@ -117,7 +116,8 @@ class Symfony1FallbackTest extends \PHPUnit_Framework_TestCase
             ->expects($this->never())
             ->method('fallbackToSymfony1');
 
-        $event1 = $this->buildControllerEvent(function () {});
+        $event1 = $this->buildControllerEvent(function () {
+        });
         $this->fallback->onKernelController($event1);
 
         $event2 = $this->buildResponseEvent(new NotFoundHttpException('henk'));

@@ -12,6 +12,7 @@ namespace Hostnet\HnDependencyInjectionPlugin;
 class ConfigCache extends \sfConfigCache
 {
 
+    // @codingStandardsIgnoreStart
     /**
      * Constructor overridden to enforce stricter typing
      *
@@ -21,6 +22,7 @@ class ConfigCache extends \sfConfigCache
     {
         parent::__construct($configuration);
     }
+    // @codingStandardsIgnoreEnd
 
     /**
      * @see sfConfigCache::checkConfig()
@@ -42,10 +44,11 @@ class ConfigCache extends \sfConfigCache
         $handler = $this->createDatabaseHandler();
         if (! ($handler instanceof HnDatabaseConfigHandler)) {
             throw new \RuntimeException(
-                'Someone created a handler of incorrect type ' . get_class($handler));
+                'Someone created a handler of incorrect type ' . get_class($handler)
+            );
         }
         $full_path = \sfConfig::get('sf_root_dir') . '/' . $config_path;
-        $data = $handler->execute();
+        $data      = $handler->execute();
 
         $cache = $this->getCacheName($config_path);
         $this->writeCacheFile($config_path, $cache, $data);

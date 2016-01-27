@@ -2,17 +2,11 @@
 namespace Hostnet\HnDependencyInjectionPlugin;
 
 use Symfony\Bundle\FrameworkBundle\Console\Application;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\TerminableInterface;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\DependencyInjection\Dumper\PhpDumper;
-use Symfony\Component\Config\ConfigCache as Symfony2ConfigCache;
-use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
-use Symfony\Component\Config\Loader\LoaderResolver;
-use Symfony\Component\Config\FileLocator;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * Use this class as your superclass for your ApplicationConfiguration
@@ -61,8 +55,9 @@ class ApplicationConfiguration extends \sfApplicationConfiguration implements Te
     public function handle(
         Request $request,
         $type = HttpKernelInterface::MASTER_REQUEST,
-        $catch = true)
-    {
+        $catch = true
+    ) {
+    
         return $this->getKernel()->handle($request, $type, $catch);
     }
 
@@ -77,8 +72,8 @@ class ApplicationConfiguration extends \sfApplicationConfiguration implements Te
     public function terminate(
         Request $request,
         Response $response
-        )
-    {
+    ) {
+    
         return $this->getKernel()->terminate($request, $response);
     }
 
@@ -96,7 +91,9 @@ class ApplicationConfiguration extends \sfApplicationConfiguration implements Te
                 throw new \RuntimeException(
                     sprintf(
                         'The kernel that was built should have been of CachedKernelInterface, got %s',
-                        get_class($this->kernel)));
+                        get_class($this->kernel)
+                    )
+                );
             }
         }
         return $this->kernel;
