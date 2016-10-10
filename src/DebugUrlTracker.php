@@ -23,16 +23,32 @@ class DebugUrlTracker
 {
     private $url;
 
+    /**
+     * @var Symfony1Context
+     */
+    private $context;
+
+    public function __construct(Symfony1Context $context)
+    {
+        $this->context = $context;
+    }
+
     public function onKernelResponse(FilterResponseEvent $event)
     {
-        if ($this->url || ! $event->isMasterRequest() || ! \sfContext::hasInstance()) {
+        if ($this->url || !$event->isMasterRequest() || !$this->context->isInitialized()) {
             return;
         }
+
         $response_headers = $event->getResponse()->headers;
+
+        $is_attachment     = (strpos($this->context->getResponse()->getHttpHeader('Content-Disposition'), 'attachment;') !== false);
+        $is_html           = (strpos($this->context->getResponse()->getContentType(), 'html') !== false);
+        $is_XmlHttpRequest = $event->getRequest()->isXmlHttpRequest();
+
         if ($response_headers->has('x-debug-token-link')
-            // Only add when the symfony 1 content type is not javascript
-            && strpos(\sfContext::getInstance()->getResponse()->getContentType(), 'javascript') === false
-            && (!$event->getRequest()->isXmlHttpRequest()) // Prevent Ajax from creating another bar
+            && $is_html // Only add bar when response is HTML
+            && !$is_attachment // Do not add when response is an attachment
+            && !$is_XmlHttpRequest // Prevent Ajax from creating another bar
         ) {
             $this->url = $response_headers->get('x-debug-token-link');
             $link      = json_encode($response_headers->get('x-debug-token-link'));
@@ -43,7 +59,7 @@ class DebugUrlTracker
   if(bar_node) { // We have a debug bar
     link_node = document.createElement('a');
     link_node.href = $link;
-    link_node.appendChild(document.createTextNode('Symfony 2'));
+    link_node.appendChild(document.createTextNode('Symfony Profiler'));
     li_node = document.createElement('li');
     li_node.appendChild(link_node);
     bar_node.insertBefore(li_node,bar_node.firstChild);
