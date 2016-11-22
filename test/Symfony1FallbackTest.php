@@ -144,7 +144,7 @@ class Symfony1FallbackTest extends \PHPUnit_Framework_TestCase
     private function buildControllerEvent($controller)
     {
         return new FilterControllerEvent(
-            $this->getMock('Symfony\Component\HttpKernel\HttpKernelInterface'),
+            $this->createMock('Symfony\Component\HttpKernel\HttpKernelInterface'),
             $controller,
             new Request(),
             'henk'
@@ -154,7 +154,7 @@ class Symfony1FallbackTest extends \PHPUnit_Framework_TestCase
     private function buildResponseEvent($ex)
     {
         return new GetResponseForExceptionEvent(
-            $this->getMock('Symfony\Component\HttpKernel\HttpKernelInterface'),
+            $this->createMock('Symfony\Component\HttpKernel\HttpKernelInterface'),
             new Request(),
             'henk',
             $ex

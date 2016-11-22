@@ -141,6 +141,7 @@ class HnDatabaseConfigHandler
 
     /**
      * @param Connection $connection
+     * @return string
      */
     private function format11DSN(Connection $connection)
     {
@@ -153,6 +154,19 @@ class HnDatabaseConfigHandler
             );
         }
         $params = $connection->getParams();
+
+        if (!empty($params['unix_socket'])) {
+            return sprintf(
+                '%s://%s:%s@localhost/%s?socket=%s&encoding=%s',
+                $driver_name,
+                $connection->getUsername(),
+                $connection->getPassword(),
+                $connection->getDatabase(),
+                $params['unix_socket'],
+                isset($params['charset']) ? $params['charset'] :  'utf8'
+            );
+        }
+
         return sprintf(
             '%s://%s:%s@%s%s/%s?encoding=%s',
             $driver_name,
