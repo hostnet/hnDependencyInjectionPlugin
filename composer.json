@@ -23,7 +23,7 @@
     },
     "require-dev": {
         "symfony/symfony1": ">=1.1",
-        "phpunit/phpunit" : "4.*"
+        "phpunit/phpunit" : "5.*"
     },
     "minimum-stability": "stable",
     "autoload": {
