@@ -1,5 +1,11 @@
 services:
+    hn_dependency_injection_plugin.symfony1.context:
+        class: Hostnet\HnDependencyInjectionPlugin\Symfony1Context
+        public: false
+
     kernel.listener.debug_url_tracker:
         class: Hostnet\HnDependencyInjectionPlugin\DebugUrlTracker
+        arguments:
+            - "@hn_dependency_injection_plugin.symfony1.context"
         tags:
             - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse, priority: -129 }
