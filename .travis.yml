@@ -8,3 +8,5 @@ php:
 install:
     - wget http://getcomposer.org/composer.phar
     - /usr/bin/php -d memory_limit=2g ./composer.phar install
+
+script: vendor/bin/phpunit
