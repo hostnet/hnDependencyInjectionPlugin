@@ -1,6 +1,7 @@
 <?php
 namespace Hostnet\HnDependencyInjectionPlugin;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -9,10 +10,9 @@ use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
- * @covers Hostnet\HnDependencyInjectionPlugin\Symfony1Fallback
- * @author Iltar van der Berg <ivanderberg@hostnet.nl>
+ * @covers \Hostnet\HnDependencyInjectionPlugin\Symfony1Fallback
  */
-class Symfony1FallbackTest extends \PHPUnit_Framework_TestCase
+class Symfony1FallbackTest extends TestCase
 {
     /**
      * @var Container
@@ -147,7 +147,7 @@ class Symfony1FallbackTest extends \PHPUnit_Framework_TestCase
             $this->createMock('Symfony\Component\HttpKernel\HttpKernelInterface'),
             $controller,
             new Request(),
-            'henk'
+            500
         );
     }
 
@@ -156,7 +156,7 @@ class Symfony1FallbackTest extends \PHPUnit_Framework_TestCase
         return new GetResponseForExceptionEvent(
             $this->createMock('Symfony\Component\HttpKernel\HttpKernelInterface'),
             new Request(),
-            'henk',
+            500,
             $ex
         );
     }
