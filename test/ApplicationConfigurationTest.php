@@ -1,7 +1,12 @@
 <?php
 namespace Hostnet\HnDependencyInjectionPlugin;
 
-class ApplicationConfigurationTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+/**
+ * @covers \Hostnet\HnDependencyInjectionPlugin\ApplicationConfiguration
+ */
+class ApplicationConfigurationTest extends TestCase
 {
     public function testGetConfigCache()
     {

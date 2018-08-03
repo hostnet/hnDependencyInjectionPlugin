@@ -1,6 +1,7 @@
 <?php
 namespace Hostnet\HnDependencyInjectionPlugin;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
@@ -8,7 +9,7 @@ use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 /**
  * @covers \Hostnet\HnDependencyInjectionPlugin\DebugUrlTracker
  */
-class DebugUrlTrackerTest extends \PHPUnit_Framework_TestCase
+class DebugUrlTrackerTest extends TestCase
 {
     /**
      * @var DebugUrlTracker

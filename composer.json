@@ -17,13 +17,13 @@
     "license": "MIT",
     "require": {
         "php": ">=5.6",
-        "symfony/symfony": "^2.7||^3.2",
+        "symfony/symfony": "^2.7||^3.2||^4.0",
         "doctrine/doctrine-bundle": ">=1.6.0",
         "doctrine/orm": ">=2.5"
     },
     "require-dev": {
-        "symfony/symfony1": ">=1.1",
-        "phpunit/phpunit" : "5.*"
+        "symfony/symfony1": ">=1.1.26",
+        "phpunit/phpunit" : "^5.7.27"
     },
     "minimum-stability": "stable",
     "autoload": {
