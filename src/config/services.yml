@@ -6,7 +6,7 @@ services:
             - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }
             - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }
 
-     Hostnet\HnDependencyInjectionPlugin\Symfony1Fallback:
+    Hostnet\HnDependencyInjectionPlugin\Symfony1Fallback:
          alias: kernel.listener.symfony1_fallback
 
     kernel.listener.cache_warmer:
