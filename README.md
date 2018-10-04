@@ -9,16 +9,9 @@ hnDependencyInjectionPlugin
 
 ### Installation
 1. [Download Composer][1].
-2. Add to your composer.json
-  ```
-  "require": {
-      "hostnet/hn-dependency-injection-plugin": "1.0.*"
-  }
-
-  ```
-3. Run ```php composer.phar install```.
-4. Make ```apps/<app>/config/<app>Configuration``` extend ```Hostnet\HnDependencyInjectionPlugin\ApplicationConfiguration```.
-5. [Optional] override the ```getKernel``` method to return your own kernel, registering the bundles you want.
+2. Run ```php composer.phar require hostnet/hn-dependency-injection-plugin```
+3. Make ```apps/<app>/config/<app>Configuration``` extend ```Hostnet\HnDependencyInjectionPlugin\ApplicationConfiguration```.
+4. [Optional] override the ```getKernel``` method to return your own kernel, registering the bundles you want.
    ```
    protected function createKernel()
    {
@@ -37,18 +30,18 @@ hnDependencyInjectionPlugin
        }
    }
    ```
-6. Create ```apps/<app>/config/config.yml``` to
+5. Create ```apps/<app>/config/config.yml``` to
    configure your [Doctrine dbal](http://symfony.com/doc/current/reference/configuration/doctrine.html#doctrine-dbal-configuration),
    [Doctrine orm](http://symfony.com/doc/current/reference/configuration/doctrine.html#configuration-overview),
    and possibly the [FrameworkBundle](http://symfony.com/doc/current/reference/configuration/framework.html).
    See also the [example configuration](https://github.com/symfony/symfony-standard/blob/master/app/config/config.yml).
-7. If you don't want to generate the propel backwards compatability layer, add this
+6. If you don't want to generate the propel backwards compatability layer, add this
    ```
    parameters:
        hn_entities_enable_backwards_compatible_connections: false
    ```
    to ```config.yml```, or ```parameters.yml``` if you prefer to have them separate.
-8. To ensure proper autoloading when using Doctrine entities, remove if you have
+7. To ensure proper autoloading when using Doctrine entities, remove if you have
    ```
    require_once __DIR__ . '/../vendor/autoload.php';
    ```
@@ -60,8 +53,8 @@ hnDependencyInjectionPlugin
    AnnotationRegistry::registerLoader(array($loader, 'loadClass'));
    ```
    That way Doctrine knows where to find your entities.
-9. Be sure to set up your permissions properly, see "[Setting up your permissions](http://symfony.com/doc/current/book/installation.html#configuration-and-setup)".
-10. After this is done we can do a little cleanup. To prevent confusion you should remove ```config/databases.yml```, since only the Symfony 2 configuration is read at this point.
+8. Be sure to set up your permissions properly, see "[Setting up your permissions](http://symfony.com/doc/current/book/installation.html#configuration-and-setup)".
+9. After this is done we can do a little cleanup. To prevent confusion you should remove ```config/databases.yml```, since only the Symfony 2 configuration is read at this point.
 
 ### Changelog
 
