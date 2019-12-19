@@ -15,7 +15,7 @@ class TestConfigCache extends ConfigCache
     public function writeCacheFile($config, $cache, $data)
     {
         if (is_array($this->args)) {
-            throw new Exception('Only once please');
+            throw new \Exception('Only once please');
         }
         $this->args = func_get_args();
     }
