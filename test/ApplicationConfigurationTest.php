@@ -8,13 +8,14 @@ use PHPUnit\Framework\TestCase;
  */
 class ApplicationConfigurationTest extends TestCase
 {
-    public function testGetConfigCache()
+    public function testGetConfigCache(): void
     {
         $config = new ApplicationConfiguration('test', true);
         $cache  = $config->getConfigCache();
-        $this->assertInstanceOf('Hostnet\HnDependencyInjectionPlugin\ConfigCache', $cache);
 
-      // And only one is made
-        $this->assertTrue($cache === $config->getConfigCache());
+        self::assertInstanceOf(ConfigCache::class, $cache);
+
+        // And only one is made
+        self::assertSame($cache, $config->getConfigCache());
     }
 }

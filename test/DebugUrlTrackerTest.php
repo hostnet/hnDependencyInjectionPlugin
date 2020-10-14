@@ -12,16 +12,10 @@ use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 class DebugUrlTrackerTest extends TestCase
 {
     /**
-     * @var DebugUrlTracker
-     */
-    private $debug_url_tracker;
-
-    /**
      * @dataProvider dataProvider
      */
-    public function testOnKernelResponse($headers, $has_xdebug_token_link, $is_master_request, $expect_debug_bar)
+    public function testOnKernelResponse($headers, $has_xdebug_token_link, $is_master_request, $expect_debug_bar): void
     {
-
         $symfony1_response = $this->prophesize(\sfWebResponse::class);
 
         //Use supplied Content-Type for sf1 Context
@@ -54,7 +48,7 @@ class DebugUrlTrackerTest extends TestCase
         }
     }
 
-    public function dataProvider()
+    public function dataProvider(): iterable
     {
         return [
             [['Content-Type' => 'text/html'], true, true, true],
@@ -64,6 +58,4 @@ class DebugUrlTrackerTest extends TestCase
             [['Content-Type' => 'application/octet-stream'], true, false, false],
         ];
     }
-
-
 }

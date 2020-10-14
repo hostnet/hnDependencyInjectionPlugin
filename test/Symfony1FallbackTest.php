@@ -7,7 +7,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
+use Symfony\Component\HttpKernel\Event\KernelEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 /**
  * @covers \Hostnet\HnDependencyInjectionPlugin\Symfony1Fallback
@@ -24,11 +27,11 @@ class Symfony1FallbackTest extends TestCase
      */
     private $fallback;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->container = new Container();
         $sf1_kernel      = $this
-            ->getMockBuilder('Hostnet\HnDependencyInjectionPlugin\Symfony1Kernel')
+            ->getMockBuilder(Symfony1Kernel::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -38,13 +41,13 @@ class Symfony1FallbackTest extends TestCase
             ->willReturn($this->container);
 
         $this->fallback = $this
-            ->getMockBuilder('Hostnet\HnDependencyInjectionPlugin\Symfony1Fallback')
+            ->getMockBuilder(Symfony1Fallback::class)
             ->setConstructorArgs([$sf1_kernel])
-            ->setMethods(['fallbackToSymfony1'])
+            ->onlyMethods(['fallbackToSymfony1'])
             ->getMock();
     }
 
-    public function testOnKernelExceptionWrongException()
+    public function testOnKernelExceptionWrongException(): void
     {
         $this->fallback
             ->expects($this->never())
@@ -53,20 +56,20 @@ class Symfony1FallbackTest extends TestCase
         $event = $this->buildResponseEvent(new \Exception('henk'));
         $this->fallback->onKernelException($event);
 
-        $this->assertFalse($event->isPropagationStopped());
+        self::assertFalse($event->isPropagationStopped());
     }
 
-    public function testOnKernelExceptionSymfony2FourOFourEnabled()
+    public function testOnKernelExceptionSymfony2FourOFourEnabled(): void
     {
         $this->container->setParameter('hn_entities_enable_symfony2_404', true);
 
         $event = $this->buildResponseEvent(new NotFoundHttpException('henk'));
         $this->fallback->onKernelException($event);
 
-        $this->assertFalse($event->isPropagationStopped());
+        self::assertFalse($event->isPropagationStopped());
     }
 
-    public function testOnKernelExceptionNeverInit()
+    public function testOnKernelExceptionNeverInit(): void
     {
         $this->fallback
             ->expects($this->once())
@@ -76,10 +79,10 @@ class Symfony1FallbackTest extends TestCase
         $event = $this->buildResponseEvent(new NotFoundHttpException('henk'));
         $this->fallback->onKernelException($event);
 
-        $this->assertFalse($event->isPropagationStopped());
+        self::assertFalse($event->isPropagationStopped());
     }
 
-    public function testOnKernelExceptionSf2Init()
+    public function testOnKernelExceptionSf2Init(): void
     {
         $this->fallback
             ->expects($this->never())
@@ -94,10 +97,10 @@ class Symfony1FallbackTest extends TestCase
         $event3 = $this->buildResponseEvent(new NotFoundHttpException('henk'));
         $this->fallback->onKernelException($event3);
 
-        $this->assertFalse($event3->isPropagationStopped());
+        self::assertFalse($event3->isPropagationStopped());
     }
 
-    public function testOnKernelExceptionSf1InitResponse()
+    public function testOnKernelExceptionSf1InitResponse(): void
     {
         $this->fallback
             ->expects($this->once())
@@ -107,10 +110,10 @@ class Symfony1FallbackTest extends TestCase
         $event2 = $this->buildResponseEvent(new NotFoundHttpException('henk'));
         $this->fallback->onKernelException($event2);
 
-        $this->assertTrue($event2->isPropagationStopped());
+        self::assertTrue($event2->isPropagationStopped());
     }
 
-    public function testOnKernelExceptionControllerSf1Init()
+    public function testOnKernelExceptionControllerSf1Init(): void
     {
         $this->fallback
             ->expects($this->never())
@@ -123,10 +126,10 @@ class Symfony1FallbackTest extends TestCase
         $event2 = $this->buildResponseEvent(new NotFoundHttpException('henk'));
         $this->fallback->onKernelException($event2);
 
-        $this->assertFalse($event2->isPropagationStopped());
+        self::assertFalse($event2->isPropagationStopped());
     }
 
-    public function testOnKernelExceptionController()
+    public function testOnKernelExceptionController(): void
     {
         $this->fallback
             ->expects($this->never())
@@ -137,24 +140,23 @@ class Symfony1FallbackTest extends TestCase
 
         $event2 = $this->buildResponseEvent(new NotFoundHttpException('henk'));
 
-        $this->assertFalse($event2->isPropagationStopped());
+        self::assertFalse($event2->isPropagationStopped());
     }
 
-
-    private function buildControllerEvent($controller)
+    private function buildControllerEvent($controller): KernelEvent
     {
         return new FilterControllerEvent(
-            $this->createMock('Symfony\Component\HttpKernel\HttpKernelInterface'),
+            $this->createMock(HttpKernelInterface::class),
             $controller,
             new Request(),
             500
         );
     }
 
-    private function buildResponseEvent($ex)
+    private function buildResponseEvent($ex): RequestEvent
     {
         return new GetResponseForExceptionEvent(
-            $this->createMock('Symfony\Component\HttpKernel\HttpKernelInterface'),
+            $this->createMock(HttpKernelInterface::class),
             new Request(),
             500,
             $ex
