@@ -19,11 +19,11 @@
         "php": ">=7.1",
         "symfony/symfony": "^4.0",
         "doctrine/doctrine-bundle": ">=1.7.0",
-        "doctrine/orm": ">=2.6"
+        "doctrine/orm": ">=2.6",
+        "symfony/symfony1": ">=1.1.26"
     },
     "require-dev": {
-        "symfony/symfony1": ">=1.1.26",
-        "phpunit/phpunit" : "^5.7.27"
+        "phpunit/phpunit" : "^8.0.0"
     },
     "minimum-stability": "stable",
     "autoload": {
