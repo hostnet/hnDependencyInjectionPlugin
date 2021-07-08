@@ -2,6 +2,7 @@
 namespace Hostnet\HnDependencyInjectionPlugin;
 
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
@@ -11,6 +12,8 @@ use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
  */
 class DebugUrlTrackerTest extends TestCase
 {
+    use ProphecyTrait;
+
     /**
      * @dataProvider dataProvider
      */
@@ -64,6 +67,4 @@ class DebugUrlTrackerTest extends TestCase
             [['Content-Type' => 'application/octet-stream'], true, false, false],
         ];
     }
-
-
 }
