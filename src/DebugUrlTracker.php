@@ -1,7 +1,7 @@
 <?php
 namespace Hostnet\HnDependencyInjectionPlugin;
 
-use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
+use Symfony\Component\HttpKernel\Event\ResponseEvent;
 
 /**
  * Makes sure the debug panel gets the profiler debug URL.
@@ -33,7 +33,7 @@ class DebugUrlTracker
         $this->context = $context;
     }
 
-    public function onKernelResponse(FilterResponseEvent $event)
+    public function onKernelResponse(ResponseEvent $event)
     {
         if ($this->url || !$event->isMasterRequest() || !$this->context->isInitialized()) {
             return;

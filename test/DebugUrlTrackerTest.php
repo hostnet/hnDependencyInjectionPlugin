@@ -6,6 +6,9 @@ use Prophecy\PhpUnit\ProphecyTrait;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
+use Symfony\Component\HttpKernel\Event\ResponseEvent;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\HttpKernel\KernelInterface;
 
 /**
  * @covers \Hostnet\HnDependencyInjectionPlugin\DebugUrlTracker
@@ -19,11 +22,10 @@ class DebugUrlTrackerTest extends TestCase
      */
     public function testOnKernelResponse($headers, $has_xdebug_token_link, $is_master_request, $expect_debug_bar): void
     {
-
         $symfony1_response = $this->prophesize(\sfWebResponse::class);
 
         //Use supplied Content-Type for sf1 Context
-        $symfony1_response->getHttpHeader("Content-Disposition")->willReturn($headers['Content-Disposition']);
+        $symfony1_response->getHttpHeader('Content-Disposition')->willReturn($headers['Content-Disposition']);
         $symfony1_response->getContentType()->willReturn($headers['Content-Type']);
 
         $symfony1_context = $this->prophesize(Symfony1Context::class);
@@ -38,12 +40,14 @@ class DebugUrlTrackerTest extends TestCase
             $response->headers->set('x-debug-token-link', "420xx0");
         }
 
-        $event = $this->prophesize(FilterResponseEvent::class);
-        $event->isMasterRequest()->willReturn($is_master_request);
-        $event->getResponse()->willReturn($response);
-        $event->getRequest()->willReturn(new Request());
-
-        $debug_url_tracker->onKernelResponse($event->reveal());
+        $debug_url_tracker->onKernelResponse(
+            new ResponseEvent(
+                $this->prophesize(KernelInterface::class)->reveal(),
+                Request::create('/some/path'),
+                $is_master_request ? HttpKernelInterface::MASTER_REQUEST : HttpKernelInterface::SUB_REQUEST,
+                $response
+            )
+        );
 
         if ($expect_debug_bar) {
             self::expectOutputRegex("/We have a debug bar/");
@@ -55,16 +59,16 @@ class DebugUrlTrackerTest extends TestCase
     public function dataProvider(): iterable
     {
         return [
-            [['Content-Type' => 'text/html'], true, true, true],
+            [['Content-Type' => 'text/html', 'Content-Disposition' => null], true, true, true],
             [
                 ['Content-Type' => 'text/html', 'Content-Disposition' => 'attachment; filename="attachment.txt"'],
                 true,
                 true,
                 false
             ],
-            [['Content-Type' => 'text/html'], true, false, false],
-            [['Content-Type' => null], true, false, false],
-            [['Content-Type' => 'application/octet-stream'], true, false, false],
+            [['Content-Type' => 'text/html', 'Content-Disposition' => null], true, false, false],
+            [['Content-Type' => null, 'Content-Disposition' => null], true, false, false],
+            [['Content-Type' => 'application/octet-stream', 'Content-Disposition' => null], true, false, false],
         ];
     }
 }
