@@ -2,7 +2,6 @@
 namespace Hostnet\HnDependencyInjectionPlugin;
 
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Driver;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -97,19 +96,21 @@ class HnDatabaseConfigHandler
         foreach ($connections as $name => $connection) {
             /* @var $connection Connection */
 
+            $params = $connection->getparams();
+
             $dsn = sprintf(
                 '%s:dbname=%s;host=%s;port=%s',
-                $this->getPropel14DriverName($connection->getDriver()),
+                $this->getPropel14DriverName($params['driver']),
                 $connection->getDatabase(),
-                $connection->getHost(),
-                $connection->getPort()
+                $params['host'],
+                $params['port']
             );
 
             $config = array(
                 'classname' => $this->getClassname($name, $debug),
                 'dsn' => $dsn,
-                'username' => $connection->getUsername(),
-                'password' => $connection->getPassword(),
+                'username' => $params['user'],
+                'password' => $params['password'],
                 'persistent' => true,
                 'pooling' => true,
                 'encoding' => 'utf8',
@@ -145,22 +146,22 @@ class HnDatabaseConfigHandler
      */
     private function format11DSN(Connection $connection)
     {
-        $driver_name = $this->getPropel12DriverName($connection->getDriver());
-        if ($connection->getDriver()->getName() == 'pdo_sqlite') {
+        $params      = $connection->getParams();
+        $driver_name = $this->getPropel12DriverName($params['driver']);
+        if ($params['driver'] === 'pdo_sqlite') {
             return sprintf(
                 '%s://hack.nl/%s',
                 $driver_name,
                 $connection->getDatabase()
             );
         }
-        $params = $connection->getParams();
 
         if (!empty($params['unix_socket'])) {
             return sprintf(
                 '%s://%s:%s@localhost/%s?socket=%s&encoding=%s',
                 $driver_name,
-                $connection->getUsername(),
-                $connection->getPassword(),
+                $params['user'],
+                $params['password'],
                 $connection->getDatabase(),
                 $params['unix_socket'],
                 isset($params['charset']) ? $params['charset'] :  'utf8'
@@ -170,10 +171,10 @@ class HnDatabaseConfigHandler
         return sprintf(
             '%s://%s:%s@%s%s/%s?encoding=%s',
             $driver_name,
-            $connection->getUsername(),
-            $connection->getPassword(),
-            $connection->getHost(),
-            $connection->getPort() ? ':' . $connection->getPort() : '',
+            $params['user'],
+            $params['password'],
+            $params['host'],
+            $params['port'] ? ':' . $params['port'] : '',
             $connection->getDatabase(),
             isset($params['charset']) ? $params['charset'] :  'utf8'
         );
@@ -184,14 +185,13 @@ class HnDatabaseConfigHandler
      * If the mysql extension is not loaded, fall back to
      * mysqli, thus being compatible with PHP 7.
      *
-     * @param Driver $driver
      * @throws \DomainException
      * @throws \RuntimeException
      * @return string
      */
-    private function getPropel12DriverName(Driver $driver)
+    private function getPropel12DriverName(string $driver)
     {
-        switch ($driver->getName()) {
+        switch ($driver) {
             case 'pdo_mysql':
                 if (extension_loaded('mysql')) {
                     return 'mysql';
@@ -211,16 +211,14 @@ class HnDatabaseConfigHandler
                 }
                 throw new \RuntimeException('The sqlite extension is not loaded.');
             default:
-                throw new \DomainException(sprintf('Unknown driver "%s"', $driver->getName()));
+                throw new \DomainException(sprintf('Unknown driver "%s"', $driver));
         }
     }
 
     /**
-     * @param Driver $driver
      * @throws \DomainException
-     * @return string
      */
-    private function getPropel14DriverName(Driver $driver)
+    private function getPropel14DriverName(string $driver): string
     {
         $lookup_table = array(
             'pdo_mysql' => 'mysql',
@@ -228,10 +226,10 @@ class HnDatabaseConfigHandler
             'pdo_sqlite' => 'sqlite'
         );
 
-        if (isset($lookup_table[$driver->getName()])) {
-            return $lookup_table[$driver->getName()];
+        if (isset($lookup_table[$driver])) {
+            return $lookup_table[$driver];
         }
-        throw new \DomainException(sprintf('Unknown driver "%s"', $driver->getName()));
+        throw new \DomainException(sprintf('Unknown driver "%s"', $driver));
     }
 
     /**
