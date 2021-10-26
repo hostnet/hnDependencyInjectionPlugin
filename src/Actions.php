@@ -2,8 +2,8 @@
 namespace Hostnet\HnDependencyInjectionPlugin;
 
 use Doctrine\Bundle\DoctrineBundle\Registry;
-use Doctrine\Common\Persistence\Mapping\MappingException;
-use Doctrine\Common\Persistence\ObjectRepository;
+use Doctrine\Persistence\Mapping\MappingException;
+use Doctrine\Persistence\ObjectRepository;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**

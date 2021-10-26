@@ -1,13 +1,13 @@
 {
-    "name": "hostnet/hn-dependency-injection-plugin",
+    "name":        "hostnet/hn-dependency-injection-plugin",
     "description": "Introduces the Symfony DI container in a Symfony 1 application.",
-    "type": "library",
-    "keywords": ["symfony", "dependency-injection", "container", "doctrine"],
+    "type":        "library",
+    "keywords":    ["symfony", "dependency-injection", "container", "doctrine"],
     "authors": [
         {
-            "name": "Nico Schoenmaker",
+            "name":     "Nico Schoenmaker",
             "homepage": "http://nschoenmaker.nl",
-            "role": "Developer"
+            "role":     "Developer"
         }
     ],
     "support": {
@@ -16,14 +16,15 @@
     },
     "license": "MIT",
     "require": {
-        "php": ">=7.3",
-        "symfony/symfony": "^4.4||^5.0",
+        "php":                      ">=7.3",
+        "doctrine/dbal":            "^2.13.4||^3.1.1",
         "doctrine/doctrine-bundle": ">=1.7.0",
-        "doctrine/orm": ">=2.6",
-        "symfony/symfony1": "~1.1.27"
+        "doctrine/orm":             ">=2.6",
+        "symfony/symfony":          "^4.4||^5.0",
+        "symfony/symfony1":         "~1.1.27"
     },
     "require-dev": {
-        "phpunit/phpunit" : "^9.5.6",
+        "phpunit/phpunit":          "^9.5.6",
         "phpspec/prophecy-phpunit": "^2.0"
     },
     "minimum-stability": "stable",

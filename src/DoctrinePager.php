@@ -24,7 +24,7 @@ class DoctrinePager extends \sfPager
     }
 
     /**
-     * @throws DomainException
+     * @throws \DomainException
      * @return QueryBuilder
      */
     private function getNewQueryBuilder()
